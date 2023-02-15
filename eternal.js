@@ -1,4 +1,4 @@
-var theme = 8; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes
+var theme = 6; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes
 document.getElementById("player-data").style.marginTop = "300px"; //delete this line if you don't have ad blocker
 
 var amountRulesAdded = 0;
@@ -229,20 +229,70 @@ function addTimeToMessages() {
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
             // if (messageList.childElementCount > 4) {
-                var newMessage = messageList.lastChild;
-                var today = new Date();
-                
-                var time = "[" + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() + "]";
-                const messageTimeDiv = document.createElement('span');
-                messageTimeDiv.classList.add = "chat-message-time";
-                messageTimeDiv.style.color = "rgb(130, 130, 130)";
+            var newMessage = messageList.lastChild;
+            var today = new Date();
+            var seconds = today.getSeconds();
+            var minutes = today.getMinutes();
+            var hours = today.getHours();
 
-                
-                messageTimeDiv.style.fontSize = "12px";
-                messageTimeDiv.innerHTML = time;
-                
-                newMessage.insertBefore(messageTimeDiv, newMessage.firstChild)
-                console.log(time + newMessage.innerHTML);
+            if (seconds < 10) {
+                seconds = "0" + seconds;
+            }
+            if (minutes < 10) {
+                minutes = "0" + minutes;
+            }
+            if (hours < 10) {
+                hours = "0" + hours;
+            }
+            var time = "[" + hours + ":" + minutes + ":" + seconds + "]";
+            const messageTimeDiv = document.createElement('span');
+            messageTimeDiv.classList.add = "chat-message-time";
+            messageTimeDiv.style.color = "rgb(130, 130, 130)";
+            messageTimeDiv.style.fontSize = "12px";
+            messageTimeDiv.style.marginRight = "5px";
+            messageTimeDiv.innerHTML = time;
+
+            //rainbow time
+            var colorCode = newMessage.parentElement.childElementCount % 8;
+            switch (colorCode) {
+                case 1:
+                    messageTimeDiv.style.color = "red";
+                    break;
+
+                case 2:
+                    messageTimeDiv.style.color = "darkorange";
+                    break;
+
+                case 3:
+                    messageTimeDiv.style.color = "yellow";
+                    break;
+
+                case 4:
+                    messageTimeDiv.style.color = "green";
+                    break;
+
+                case 5:
+                    messageTimeDiv.style.color = "cyan";
+                    break;
+
+                case 6:
+                    messageTimeDiv.style.color = "dodgerblue";
+                    break;
+
+                case 7:
+                    messageTimeDiv.style.color = "blueviolet";
+                    break;
+
+                case 0:
+                    messageTimeDiv.style.color = "magenta";
+                    break;
+
+                default:
+                    break;
+            }
+
+
+            newMessage.insertBefore(messageTimeDiv, newMessage.firstChild)
             // }
         }
     };
