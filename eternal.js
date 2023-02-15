@@ -75,7 +75,7 @@ themePlus.onclick = function () {
     theme = theme % amountThemes;
     console.log("Theme: " + theme + ", amountRulesAdded: " + amountRulesAdded);
     updateTheme();
-    
+
     themeButtonText.innerHTML = "Theme " + theme;
 }
 
@@ -95,7 +95,7 @@ function updateTheme() {
 
         case 1:
             //purple
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2757 !important}', 0);
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2757 !important;}', 0);
             ss.insertRule('#overlay {background: radial-gradient(rgba(31, 0, 33, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
             ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 2);
             ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 3);
@@ -105,7 +105,7 @@ function updateTheme() {
 
         case 2:
             //wine red
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2730 !important}', 0);
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2730 !important;}', 0);
             ss.insertRule('#overlay {background: radial-gradient(rgba(33, 0, 10, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
             ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 2);
             ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 3);
@@ -220,3 +220,33 @@ document.querySelectorAll(".social-container").forEach(element => {
     element.appendChild(themeButton);
     element.appendChild(newbutton2);
 });
+
+//messages show time posted
+addTimeToMessages();
+function addTimeToMessages() {
+    var messageList = document.getElementById("message-list");
+    const config = { attributes: false, childList: true, subtree: false };
+    const callback = (mutationList, observer) => {
+        for (const mutation of mutationList) {
+            // if (messageList.childElementCount > 4) {
+                var newMessage = messageList.lastChild;
+                var today = new Date();
+                
+                var time = "[" + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() + "]";
+                const messageTimeDiv = document.createElement('span');
+                messageTimeDiv.classList.add = "chat-message-time";
+                messageTimeDiv.style.color = "rgb(130, 130, 130)";
+
+                
+                messageTimeDiv.style.fontSize = "12px";
+                messageTimeDiv.innerHTML = time;
+                
+                newMessage.insertBefore(messageTimeDiv, newMessage.firstChild)
+                console.log(time + newMessage.innerHTML);
+            // }
+        }
+    };
+    const observer = new MutationObserver(callback);
+    observer.observe(messageList, config);
+
+}
