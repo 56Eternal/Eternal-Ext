@@ -5,7 +5,7 @@ var messageTimeRainbow = false; //change to "true" if you want the chat time to 
 addChangeThemeButton();
 addGiantChatButton();
 addTimeToMessages();
-
+addExtensionOptions();
 function addChangeThemeButton() {
     //Change Theme parent button
     var amountRulesAdded = 0;
@@ -235,17 +235,26 @@ function addGiantChatButton() {
 
 //messages show time posted
 function addTimeToMessages() {
-    var messageList = document.getElementById("message-list");
+    const messageList = document.getElementById("message-list");
     const config = { attributes: false, childList: true, subtree: false };
+    var msDigits = 1;
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
             // if (messageList.childElementCount > 4) {
-            var newMessage = messageList.lastChild;
-            var today = new Date();
-            var seconds = today.getSeconds();
-            var minutes = today.getMinutes();
-            var hours = today.getHours();
+            const newMessage = messageList.lastChild;
+            const now = new Date();
+            var seconds = now.getSeconds();
+            var minutes = now.getMinutes();
+            var hours = now.getHours();
+            var ms = now.getMilliseconds();
 
+            ms = ms.toString();
+            if (ms.length == 1) {
+                ms = "00" + ms;
+            }
+            else if (ms.length == 2) {
+                ms = "0" + ms;
+            }
             if (seconds < 10) {
                 seconds = "0" + seconds;
             }
@@ -255,7 +264,11 @@ function addTimeToMessages() {
             if (hours < 10) {
                 hours = "0" + hours;
             }
-            var time = "[" + hours + ":" + minutes + ":" + seconds + "]";
+            ms = ms.slice(0, msDigits);
+            if (ms.length != 0) {
+                ms = "." + ms;
+            }
+            var time = "[" + hours + ":" + minutes + ":" + seconds + ms +"]";
             const messageTimeElement = document.createElement('span');
             messageTimeElement.classList.add = "chat-message-time";
             messageTimeElement.style.color = "rgb(130, 130, 130)";
@@ -308,5 +321,23 @@ function addTimeToMessages() {
 
 }
 
+function addExtensionOptions() {
 
+
+    var playerContainer = document.getElementById("player-container");
+    const config = { attributes: false, childList: true, subtree: false };
+    const callback = (mutationList, observer) => {
+        for (const mutation of mutationList) {
+            if (playerContainer.childElementCount == 3) {
+                
+            }
+            //TODO
+            console.log(playerContainer.lastChild.childNodes.length);
+            
+        }
+    }
+    const observer = new MutationObserver(callback);
+    observer.observe(playerContainer, config);
+    
+}
 
