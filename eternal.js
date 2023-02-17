@@ -1,15 +1,19 @@
 var theme = 6; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes
 document.getElementById("player-data").style.marginTop = "300px"; //delete this line if you don't have ad blocker
 var messageTimeRainbow = false; //change to "true" if you want the chat time to be displayed in different colors
+var ss = document.styleSheets[0];
+var socialContainer = document.querySelector(".social-container");
+socialContainer.style.width = "auto";
 
 addChangeThemeButton();
 addGiantChatButton();
 addTimeToMessages();
 addExtensionOptions();
+
 function addChangeThemeButton() {
     //Change Theme parent button
     var amountRulesAdded = 0;
-    var amountThemes = 9;
+    var amountThemes = 10;
     var ss = document.styleSheets[0];
     updateTheme();
     const themeButton = document.createElement('div');
@@ -87,10 +91,8 @@ function addChangeThemeButton() {
     themeButton.appendChild(themeMinus);
     themeButton.appendChild(themeButtonText);
     themeButton.appendChild(themePlus);
-    document.querySelectorAll(".social-container").forEach(element => {
-        element.style.width = "auto";
-        element.appendChild(themeButton);
-    });
+    socialContainer.appendChild(themeButton);
+
 
     function updateTheme() {
         for (let i = 0; i < amountRulesAdded; i++) {
@@ -181,6 +183,14 @@ function addChangeThemeButton() {
                 ss.insertRule('.replay-list {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074340235518947408/replay-list.png) !important;}', 4);
                 amountRulesAdded = 5;
                 break;
+            case 9:
+                //cactus 194°
+                ss.insertRule('::-webkit-scrollbar-thumb {background: rgba(0,0,0,0) !important;}', 0);
+                ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 2);
+                ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 3);
+                ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 4);
+                amountRulesAdded = 5;
+                break;
 
         }
     }
@@ -188,6 +198,8 @@ function addChangeThemeButton() {
 
 
 function addGiantChatButton() {
+    var chatbox = document.getElementById("chatbox");
+    var tateSizeChat = false;
     const newbutton2 = document.createElement('div');
     newbutton2.id = "big-chat";
     newbutton2.style.background = "#32a852";
@@ -211,8 +223,8 @@ function addGiantChatButton() {
         makeChatTateSize();
     }
 
-    var chatbox = document.getElementById("chatbox");
-    var tateSizeChat = false;
+    socialContainer.style.width = "auto";
+    socialContainer.appendChild(newbutton2);
 
     function makeChatTateSize() {
         if (tateSizeChat) {
@@ -225,19 +237,16 @@ function addGiantChatButton() {
             // chatbox.style.width = "700px";
             tateSizeChat = true;
         }
+        var themeOptionsMenu = document.querySelector("data-v-1bcde71e");
+        themeOptionsMenu.style.background = "black";
     }
-
-    document.querySelectorAll(".social-container").forEach(element => {
-        element.style.width = "auto";
-        element.appendChild(newbutton2);
-    });
 }
 
 //messages show time posted
 function addTimeToMessages() {
     const messageList = document.getElementById("message-list");
     const config = { attributes: false, childList: true, subtree: false };
-    var msDigits = 1;
+    var mothershipDigits = 1;
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
             // if (messageList.childElementCount > 4) {
@@ -246,14 +255,14 @@ function addTimeToMessages() {
             var seconds = now.getSeconds();
             var minutes = now.getMinutes();
             var hours = now.getHours();
-            var ms = now.getMilliseconds();
+            var motherships = now.getMilliseconds();
 
-            ms = ms.toString();
-            if (ms.length == 1) {
-                ms = "00" + ms;
+            motherships = motherships.toString();
+            if (motherships.length == 1) {
+                motherships = "00" + motherships;
             }
-            else if (ms.length == 2) {
-                ms = "0" + ms;
+            else if (motherships.length == 2) {
+                motherships = "0" + motherships;
             }
             if (seconds < 10) {
                 seconds = "0" + seconds;
@@ -264,11 +273,11 @@ function addTimeToMessages() {
             if (hours < 10) {
                 hours = "0" + hours;
             }
-            ms = ms.slice(0, msDigits);
-            if (ms.length != 0) {
-                ms = "." + ms;
+            motherships = motherships.slice(0, mothershipDigits);
+            if (motherships.length != 0) {
+                motherships = "." + motherships;
             }
-            var time = "[" + hours + ":" + minutes + ":" + seconds + ms +"]";
+            var time = "[" + hours + ":" + minutes + ":" + seconds + motherships + "]";
             const messageTimeElement = document.createElement('span');
             messageTimeElement.classList.add = "chat-message-time";
             messageTimeElement.style.color = "rgb(130, 130, 130)";
@@ -324,20 +333,32 @@ function addTimeToMessages() {
 function addExtensionOptions() {
 
 
-    var playerContainer = document.getElementById("player-container");
-    const config = { attributes: false, childList: true, subtree: false };
-    const callback = (mutationList, observer) => {
-        for (const mutation of mutationList) {
-            if (playerContainer.childElementCount == 3) {
-                
-            }
-            //TODO
-            console.log(playerContainer.lastChild.childNodes.length);
-            
-        }
-    }
-    const observer = new MutationObserver(callback);
-    observer.observe(playerContainer, config);
-    
+    // var playerContainer = document.getElementById("player-container");
+    // const config = { attributes: false, childList: true, subtree: false };
+    // const callback = (mutationList, observer) => {
+    //     for (const mutation of mutationList) {
+    //         if (playerContainer.childElementCount == 3) {
+
+    //         }
+    //         //TODO
+    //         console.log(playerContainer.lastChild.childNodes.length);
+
+    //     }
+    // }
+    // const observer = new MutationObserver(callback);
+    // observer.observe(playerContainer, config);
+    // ss.insertRule('[data-v-15c13b66] {background: black;}', 1);
+    // const newbutton2 = document.createElement('div');
+    // newbutton2.id = "big-chat";
+    // newbutton2.style.background = "#32a852";
+    // newbutton2.style.cursor = "pointer";
+    // newbutton2.style.padding = "5px 15px";
+    // newbutton2.style.textShadow = "1px 1px 2px #000";
+    // newbutton2.style.borderRadius = "4px";
+    // newbutton2.style.margin = "0px 4px";
+    // newbutton2.style.boxShadow = '0 0 1px 1px #000';
+    // newbutton2.style.textAlign = "center";
+    // newbutton2.innerHTML = "Giant Chat";
+
 }
 
