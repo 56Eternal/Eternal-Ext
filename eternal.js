@@ -332,11 +332,8 @@ function addTimeToMessages() {
 
 }
 
-<<<<<<< HEAD
 function oldChatStyling() {
     ss.insertRule('.message-from {font-size: 14px !important;}', 0);
     ss.insertRule('.message-from-name {font-size: 14px !important;}', 0);
     ss.insertRule('.message-row {align-items: baseline !important;}', 0);
 }
-=======
->>>>>>> c242ea348bc10134d6433326cd3c14d936271f6f
