@@ -1,14 +1,14 @@
-var theme = 6; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes
+var theme = 6; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes, 9 = transparent
 document.getElementById("player-data").style.marginTop = "300px"; //delete this line if you don't have ad blocker
 var messageTimeRainbow = false; //change to "true" if you want the chat time to be displayed in different colors
-var ss = document.styleSheets[0];
+const ss = document.styleSheets[0];
 var socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
 
+oldChatStyling();
 addChangeThemeButton();
 addGiantChatButton();
 addTimeToMessages();
-addExtensionOptions();
 
 function addChangeThemeButton() {
     //Change Theme parent button
@@ -185,11 +185,10 @@ function addChangeThemeButton() {
                 break;
             case 9:
                 //cactus 194°
-                ss.insertRule('::-webkit-scrollbar-thumb {background: rgba(0,0,0,0) !important;}', 0);
                 ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 2);
                 ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 3);
                 ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 4);
-                amountRulesAdded = 5;
+                amountRulesAdded = 3;
                 break;
 
         }
@@ -198,8 +197,9 @@ function addChangeThemeButton() {
 
 
 function addGiantChatButton() {
-    var chatbox = document.getElementById("chatbox");
+    var chatbox = document.querySelector(".chatbox");
     var tateSizeChat = false;
+    var originalHeight;
     const newbutton2 = document.createElement('div');
     newbutton2.id = "big-chat";
     newbutton2.style.background = "#32a852";
@@ -228,23 +228,21 @@ function addGiantChatButton() {
 
     function makeChatTateSize() {
         if (tateSizeChat) {
-            chatbox.style.height = "200px";
-            // chatbox.style.width = "420px";
+            chatbox.style.height = originalHeight;
             tateSizeChat = false;
         }
         else {
+            originalHeight = chatbox.style.height;
             chatbox.style.height = "830px";
-            // chatbox.style.width = "700px";
             tateSizeChat = true;
         }
-        var themeOptionsMenu = document.querySelector("data-v-1bcde71e");
-        themeOptionsMenu.style.background = "black";
+        console.log(originalHeight);
     }
 }
 
 //messages show time posted
 function addTimeToMessages() {
-    const messageList = document.getElementById("message-list");
+    const messageList = document.querySelector(".message-list");
     const config = { attributes: false, childList: true, subtree: false };
     var mothershipDigits = 1;
     const callback = (mutationList, observer) => {
@@ -330,35 +328,8 @@ function addTimeToMessages() {
 
 }
 
-function addExtensionOptions() {
-
-
-    // var playerContainer = document.getElementById("player-container");
-    // const config = { attributes: false, childList: true, subtree: false };
-    // const callback = (mutationList, observer) => {
-    //     for (const mutation of mutationList) {
-    //         if (playerContainer.childElementCount == 3) {
-
-    //         }
-    //         //TODO
-    //         console.log(playerContainer.lastChild.childNodes.length);
-
-    //     }
-    // }
-    // const observer = new MutationObserver(callback);
-    // observer.observe(playerContainer, config);
-    // ss.insertRule('[data-v-15c13b66] {background: black;}', 1);
-    // const newbutton2 = document.createElement('div');
-    // newbutton2.id = "big-chat";
-    // newbutton2.style.background = "#32a852";
-    // newbutton2.style.cursor = "pointer";
-    // newbutton2.style.padding = "5px 15px";
-    // newbutton2.style.textShadow = "1px 1px 2px #000";
-    // newbutton2.style.borderRadius = "4px";
-    // newbutton2.style.margin = "0px 4px";
-    // newbutton2.style.boxShadow = '0 0 1px 1px #000';
-    // newbutton2.style.textAlign = "center";
-    // newbutton2.innerHTML = "Giant Chat";
-
+function oldChatStyling() {
+    ss.insertRule('.message-from {font-size: 14px !important;}', 0);
+    ss.insertRule('.message-from-name {font-size: 14px !important;}', 0);
+    ss.insertRule('.message-row {align-items: baseline !important;}', 0);
 }
-
