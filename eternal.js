@@ -4,6 +4,10 @@ var messageTimeRainbow = false; //change to "true" if you want the chat time to 
 const ss = document.styleSheets[0];
 var socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
+ss.insertRule('.message-from {font-size: 14px !important;}', 0);
+ss.insertRule('.message-from-name {font-size: 14px !important;}', 0);
+ss.insertRule('.message-text {margin-top: 0px !important;}', 0);
+ss.insertRule('.message-row {align-items: flex-end !important;}', 0);
 
 oldChatStyling();
 addChangeThemeButton();
@@ -328,8 +332,11 @@ function addTimeToMessages() {
 
 }
 
+<<<<<<< HEAD
 function oldChatStyling() {
     ss.insertRule('.message-from {font-size: 14px !important;}', 0);
     ss.insertRule('.message-from-name {font-size: 14px !important;}', 0);
     ss.insertRule('.message-row {align-items: baseline !important;}', 0);
 }
+=======
+>>>>>>> c242ea348bc10134d6433326cd3c14d936271f6f
