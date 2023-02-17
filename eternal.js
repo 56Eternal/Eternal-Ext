@@ -1,23 +1,42 @@
-var theme = 6; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes, 9 = transparent
+var theme = 1; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes, 9 = transparent, 10=flashing
 document.getElementById("player-data").style.marginTop = "300px"; //delete this line if you don't have ad blocker
 var messageTimeRainbow = false; //change to "true" if you want the chat time to be displayed in different colors
 const ss = document.styleSheets[0];
-var socialContainer = document.querySelector(".social-container");
+const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
-ss.insertRule('.message-from {font-size: 14px !important;}', 0);
-ss.insertRule('.message-from-name {font-size: 14px !important;}', 0);
-ss.insertRule('.message-text {margin-top: 0px !important;}', 0);
-ss.insertRule('.message-row {align-items: flex-end !important;}', 0);
 
 oldChatStyling();
 addChangeThemeButton();
 addGiantChatButton();
 addTimeToMessages();
 
+
+var css = document.createElement("style");
+css.appendChild(document.createTextNode(`
+@keyframes menuFlashing {
+    0%   {background: white;}
+  100%  {background: black;}
+
+  }
+#theme-plus:hover{
+    background:#007777;
+    transition:all .4s ease;
+}
+#theme-minus:hover{
+    background:#007777;
+    transition:all .4s ease;
+}
+#giant-chat:hover{
+    background:#2b9047;
+    transition:all .4s ease;
+}
+`));
+document.head.appendChild(css);
+
 function addChangeThemeButton() {
     //Change Theme parent button
     var amountRulesAdded = 0;
-    var amountThemes = 10;
+    var amountThemes = 11;
     var ss = document.styleSheets[0];
     updateTheme();
     const themeButton = document.createElement('div');
@@ -49,14 +68,6 @@ function addChangeThemeButton() {
     themeMinus.style.padding = "5px 0px";
     themeMinus.style.borderTopLeftRadius = "4px";
     themeMinus.style.borderBottomLeftRadius = "4px";
-    themeMinus.onmouseenter = function () {
-        this.style.background = "#007777";
-        this.style.transition = "0.2s";
-    }
-    themeMinus.onmouseleave = function () {
-        this.style.background = "#008b8b";
-        this.style.transition = "0.2s";
-    }
     themeMinus.onclick = function () {
         theme--;
         if (theme == -1) {
@@ -75,14 +86,6 @@ function addChangeThemeButton() {
     themePlus.style.padding = "5px 0px";
     themePlus.style.borderTopRightRadius = "4px";
     themePlus.style.borderBottomRightRadius = "4px";
-    themePlus.onmouseenter = function () {
-        this.style.background = "#007777";
-        this.style.transition = "0.2s";
-    }
-    themePlus.onmouseleave = function () {
-        this.style.background = "#008b8b";
-        this.style.transition = "0.2s";
-    }
     themePlus.onclick = function () {
         theme++;
         theme = theme % amountThemes;
@@ -104,7 +107,7 @@ function addChangeThemeButton() {
         }
         switch (theme) {
             case 0:
-                //default #273b5e, #0f1724, rgba(0,17,33,.75)
+                //default background: linear-gradient(to right bottom, #273b5e, #0f1724); rgba(0,17,33,.75)
                 amountRulesAdded = 0;
                 break;
 
@@ -189,12 +192,17 @@ function addChangeThemeButton() {
                 break;
             case 9:
                 //cactus 194°
-                ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 2);
-                ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 3);
-                ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 4);
+                ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 0);
+                ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 1);
+                ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 2);
+
                 amountRulesAdded = 3;
                 break;
 
+            case 10:
+                ss.insertRule('.fade-box {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
+                amountRulesAdded = 1;
+                break;
         }
     }
 }
@@ -205,7 +213,7 @@ function addGiantChatButton() {
     var tateSizeChat = false;
     var originalHeight;
     const newbutton2 = document.createElement('div');
-    newbutton2.id = "big-chat";
+    newbutton2.id = "giant-chat";
     newbutton2.style.background = "#32a852";
     newbutton2.style.cursor = "pointer";
     newbutton2.style.padding = "5px 15px";
@@ -251,7 +259,6 @@ function addTimeToMessages() {
     var mothershipDigits = 1;
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
-            // if (messageList.childElementCount > 4) {
             const newMessage = messageList.lastChild;
             const now = new Date();
             var seconds = now.getSeconds();
@@ -285,6 +292,7 @@ function addTimeToMessages() {
             messageTimeElement.style.color = "rgb(130, 130, 130)";
             messageTimeElement.style.fontSize = "12px";
             messageTimeElement.style.marginRight = "5px";
+            messageTimeElement.style.marginBottom = "1px";
             messageTimeElement.innerHTML = time;
 
             if (messageTimeRainbow) {
@@ -323,8 +331,7 @@ function addTimeToMessages() {
                         break;
                 }
             }
-            newMessage.insertBefore(messageTimeElement, newMessage.firstChild)
-            // }
+            newMessage.prepend(messageTimeElement);
         }
     };
     const observer = new MutationObserver(callback);
