@@ -1,41 +1,64 @@
-var theme = 1; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes, 9 = transparent, 10=flashing
-var adblocker = false;
-if (localStorage.adblocker == 'true') {
-    adblocker = true;
-} else {
-    adblocker = false;
-}
-var rainbowTime = false;
-if (localStorage.rainbowTime == 'true') {
-    rainbowTime = true;
-} else {
-    rainbowTime = false;
-}
-
-var messageTime = true;
-if (localStorage.messageTime == 'false') {
-    messageTime = false;
-} else {
-    messageTime = true;
-}
+//global stuff
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
 
-if (adblocker) {
-    lowerPlayerData();
+//setting variables
+var amountRulesAdded = 0;
+var theme = 1; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes, 9 = transparent, 10=flashing
+if (localStorage.getItem("theme") != null) {
+    theme = parseInt(localStorage.getItem("theme"));
+}
+var oldChatStyling = true;
+if (localStorage.getItem("oldChatStyling") != null) {
+    if (localStorage.getItem("oldChatStyling") == "true") {
+        oldChatStyling = true;
+    }
+    else {
+        oldChatStyling = false;
+    }
+}
+var adblocker = false;
+if (localStorage.getItem("adblocker") != null) {
+    if (localStorage.getItem("adblocker") == "true") {
+        adblocker = true;
+    }
+    else {
+        adblocker = false;
+    }
+}
+var rainbowTime = false;
+if (localStorage.getItem("rainbowTime") != null) {
+    if (localStorage.getItem("rainbowTime") == "true") {
+        rainbowTime = true;
+    }
+    else {
+        rainbowTime = false;
+    }
+}
+var messageTime = true;
+if (localStorage.getItem("messageTime") != null) {
+    if (localStorage.getItem("messageTime") == "true") {
+        messageTime = true;
+    }
+    else {
+        messageTime = false;
+    }
 }
 
 
-
-oldChatStyling();
+updateTheme();
+if (adblocker) {
+    lowerPlayerData();
+}
+if(oldChatStyling) {
+    makeOldChatStyling();
+}
 addChangeThemeButton();
 addGiantChatButton();
 addTimeToMessages();
 addOptionsMenu();
-addTheme10()
-
-
+addTheme10();
 
 
 function addTheme10() {
@@ -69,10 +92,7 @@ function lowerPlayerData() {
 
 function addChangeThemeButton() {
     //Change Theme parent button
-    var amountRulesAdded = 0;
     var amountThemes = 11;
-    var ss = document.styleSheets[0];
-    updateTheme();
     const themeButton = document.createElement('div');
     themeButton.id = "theme-button";
     themeButton.style.display = "flex";
@@ -123,7 +143,7 @@ function addChangeThemeButton() {
     themePlus.onclick = function () {
         theme++;
         theme = theme % amountThemes;
-        console.log("Theme: " + theme + ", amountRulesAdded: " + amountRulesAdded);
+        // console.log("Theme: " + theme + ", amountRulesAdded: " + amountRulesAdded);
         updateTheme();
 
         themeButtonText.innerHTML = "Theme " + theme;
@@ -133,114 +153,117 @@ function addChangeThemeButton() {
     themeButton.appendChild(themeButtonText);
     themeButton.appendChild(themePlus);
     socialContainer.appendChild(themeButton);
-
-
-    function updateTheme() {
-        for (let i = 0; i < amountRulesAdded; i++) {
-            ss.deleteRule(0);
-        }
-        switch (theme) {
-            case 0:
-                //default background: linear-gradient(to right bottom, #273b5e, #0f1724); rgba(0,17,33,.75)
-                amountRulesAdded = 0;
-                break;
-
-            case 1:
-                //purple
-                ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2757 !important;}', 0);
-                ss.insertRule('#overlay {background: radial-gradient(rgba(31, 0, 33, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-                ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 2);
-                ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 3);
-                ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 4);
-                amountRulesAdded = 5;
-                break;
-
-            case 2:
-                //wine red
-                ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2730 !important;}', 0);
-                ss.insertRule('#overlay {background: radial-gradient(rgba(33, 0, 10, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-                ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 2);
-                ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 3);
-                ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 4);
-                amountRulesAdded = 5;
-                break;
-
-            case 3:
-                //petrol
-                ss.insertRule('::-webkit-scrollbar-thumb {background-color: #275e42 !important;}', 0);
-                ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 11, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-                ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 2);
-                ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 3);
-                ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 4);
-                amountRulesAdded = 5;
-                break;
-
-            case 4:
-                //cyan
-                ss.insertRule('::-webkit-scrollbar-thumb {background-color: #52afb7 !important;}', 0);
-                ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 31, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-                ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 2);
-                ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 3);
-                ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 4);
-                amountRulesAdded = 5;
-                break;
-
-            case 5:
-                //brown -202°
-                ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e3627 !important;}', 0);
-                ss.insertRule('#overlay {background: radial-gradient(rgba(33, 4, 0, .75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-                ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 2);
-                ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 3);
-                ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 4);
-                amountRulesAdded = 5;
-                break;
-
-            case 6:
-                //cactus 194°
-                ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e5727 !important;}', 0);
-                ss.insertRule('#overlay {background: radial-gradient(rgba(33, 24, 0, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-                ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 2);
-                ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 3);
-                ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 4);
-                amountRulesAdded = 5;
-                break;
-
-            case 7:
-                //misavers
-                ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 0);
-                ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-                ss.insertRule('.fade-box {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 2);
-                ss.insertRule('.replay-list-header {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 3);
-                ss.insertRule('.swal2-popup {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 4);
-                amountRulesAdded = 5;
-                break;
-
-            case 8:
-                //quotes
-                ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 0);
-                ss.insertRule('.fade-box {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 1);
-                ss.insertRule('.swal2-popup {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 2);
-                ss.insertRule('.replay-list-header {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074337213061541970/image.png) !important;}', 3);
-                ss.insertRule('.replay-list {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074340235518947408/replay-list.png) !important;}', 4);
-                amountRulesAdded = 5;
-                break;
-            case 9:
-                //cactus 194°
-                ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 0);
-                ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 1);
-                ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 2);
-
-                amountRulesAdded = 3;
-                break;
-
-            case 10:
-                ss.insertRule('.fade-box {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
-                amountRulesAdded = 1;
-                break;
-        }
-    }
 }
 
+
+function updateTheme() {
+    for (let i = 0; i < amountRulesAdded; i++) {
+        ss.deleteRule(0);
+    }
+    switch (theme) {
+        case 0:
+            //default background: linear-gradient(to right bottom, #273b5e, #0f1724); rgba(0,17,33,.75)
+            amountRulesAdded = 0;
+            break;
+
+        case 1:
+            //purple
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2757 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(31, 0, 33, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+        case 2:
+            //wine red
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2730 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 0, 10, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+        case 3:
+            //petrol
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #275e42 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 11, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+        case 4:
+            //cyan
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #52afb7 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 31, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+        case 5:
+            //brown -202°
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e3627 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 4, 0, .75) 300px,rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+        case 6:
+            //cactus 194°
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e5727 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 24, 0, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+        case 7:
+            //misavers
+            ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+        case 8:
+            //quotes
+            ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 0);
+            ss.insertRule('.fade-box {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 1);
+            ss.insertRule('.swal2-popup {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074337213061541970/image.png) !important;}', 3);
+            ss.insertRule('.replay-list {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074340235518947408/replay-list.png) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+        case 9:
+            //cactus 194°
+            ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 0);
+            ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 1);
+            ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 2);
+
+            amountRulesAdded = 3;
+            break;
+
+        case 10:
+            ss.insertRule('.fade-box {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
+            amountRulesAdded = 1;
+            break;
+        
+        default:
+            console.log("UHFEHUIFKRRZBIGHK");
+    }
+    localStorage.setItem("theme", theme);
+}
 
 function addGiantChatButton() {
     var chatbox = document.querySelector(".chatbox");
@@ -282,7 +305,8 @@ function addGiantChatButton() {
             chatbox.style.height = "830px";
             tateSizeChat = true;
         }
-        console.log(messageTime);
+        // console.log("Theme: " + theme + ", amount rules added: " + amountRulesAdded);
+        // console.log(ss.cssRules);
     }
 }
 
@@ -380,10 +404,10 @@ function addTimeToMessages() {
 
 }
 
-function oldChatStyling() {
-    ss.insertRule('.message-from {font-size: 14px !important;}', 0);
-    ss.insertRule('.message-from-name {font-size: 14px !important;}', 0);
-    ss.insertRule('.message-row {align-items: baseline !important;}', 0);
+function makeOldChatStyling() {
+    ss.insertRule('.message-from {font-size: 14px !important;}', 1000);
+    ss.insertRule('.message-from-name {font-size: 14px !important;}', 1000);
+    ss.insertRule('.message-row {align-items: baseline !important;}', 1000);
 }
 
 function addOptionsMenu() {
@@ -397,10 +421,14 @@ function addOptionsMenu() {
     optionsDiv.style.backgroundColor = "rgb(0,0,0,.5)";
     optionsDiv.style.color = "white"
     optionsDiv.innerHTML = `
-       <label for="messageTimeCheckBox">Display Message Time:</label> 
-       <input type="checkbox" id="messageTimeCheckBox">
-       <label for="rainbowTimeCheckBox">Rainbow Message Time:</label> 
-       <input type="checkbox" id="rainbowTimeCheckBox">
+       <label for="messageTimeCheckBox" title="Shows the time a message in chat was sent along with the message.">Display Message Time:</label> 
+       <input type="checkbox" id="messageTimeCheckBox"><br>
+       <label for="rainbowTimeCheckBox" title="time the message was sent is displayed in rainbow colors.">Rainbow Message Time:</label> 
+       <input type="checkbox" id="rainbowTimeCheckBox"><br>
+       <label for="adblockerCheckBox" title="For people who use an adblocker which moves the name field, play button etc. to the top of the menu. Reload Page to apply changes.">Using adblocker:</label> 
+       <input type="checkbox" id="adblockerCheckBox"><br>
+       <label for="oldChatStylingCheckBox" title="Changes the look of the chat to how it was before update 94df. Reload Page to apply changes.">Old Chat Styling:</label> 
+       <input type="checkbox" id="oldChatStylingCheckBox"><br>
        `;
     document.getElementById("overlay").append(optionsDiv);
 
@@ -413,7 +441,16 @@ function addOptionsMenu() {
     document.getElementById("rainbowTimeCheckBox").checked = rainbowTime;
     document.getElementById("rainbowTimeCheckBox").onclick = function () {
         rainbowTime = !rainbowTime;
-        // localStorage.setItem("rainbowTime", rainbowTime);
+        localStorage.setItem("rainbowTime", rainbowTime);
     }
-
+    document.getElementById("adblockerCheckBox").checked = adblocker;
+    document.getElementById("adblockerCheckBox").onclick = function () {
+        adblocker = !adblocker;
+        localStorage.setItem("adblocker", adblocker);
+    }
+    document.getElementById("oldChatStylingCheckBox").checked = oldChatStyling;
+    document.getElementById("oldChatStylingCheckBox").onclick = function () {
+        oldChatStyling = !oldChatStyling;
+        localStorage.setItem("oldChatStyling", oldChatStyling);
+    }
 }
