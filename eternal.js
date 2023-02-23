@@ -1,18 +1,46 @@
 var theme = 1; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes, 9 = transparent, 10=flashing
-document.getElementById("player-data").style.marginTop = "300px"; //delete this line if you don't have ad blocker
-var messageTimeRainbow = false; //change to "true" if you want the chat time to be displayed in different colors
+var adblocker = false;
+if (localStorage.adblocker == 'true') {
+    adblocker = true;
+} else {
+    adblocker = false;
+}
+var rainbowTime = false;
+if (localStorage.rainbowTime == 'true') {
+    rainbowTime = true;
+} else {
+    rainbowTime = false;
+}
+
+var messageTime = true;
+if (localStorage.messageTime == 'false') {
+    messageTime = false;
+} else {
+    messageTime = true;
+}
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
+
+if (adblocker) {
+    lowerPlayerData();
+}
+
+
 
 oldChatStyling();
 addChangeThemeButton();
 addGiantChatButton();
 addTimeToMessages();
+addOptionsMenu();
+addTheme10()
 
 
-var css = document.createElement("style");
-css.appendChild(document.createTextNode(`
+
+
+function addTheme10() {
+    var css = document.createElement("style");
+    css.appendChild(document.createTextNode(`
 @keyframes menuFlashing {
     0%   {background: white;}
   100%  {background: black;}
@@ -31,7 +59,13 @@ css.appendChild(document.createTextNode(`
     transition:all .4s ease;
 }
 `));
-document.head.appendChild(css);
+    document.head.appendChild(css);
+}
+
+function lowerPlayerData() {
+    document.getElementById("player-data").style.marginTop = "300px";
+}
+
 
 function addChangeThemeButton() {
     //Change Theme parent button
@@ -248,7 +282,7 @@ function addGiantChatButton() {
             chatbox.style.height = "830px";
             tateSizeChat = true;
         }
-        console.log(originalHeight);
+        console.log(messageTime);
     }
 }
 
@@ -259,79 +293,86 @@ function addTimeToMessages() {
     var mothershipDigits = 1;
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
-            const newMessage = messageList.lastChild;
-            const now = new Date();
-            var seconds = now.getSeconds();
-            var minutes = now.getMinutes();
-            var hours = now.getHours();
-            var motherships = now.getMilliseconds();
+            if (messageTime) {
 
-            motherships = motherships.toString();
-            if (motherships.length == 1) {
-                motherships = "00" + motherships;
-            }
-            else if (motherships.length == 2) {
-                motherships = "0" + motherships;
-            }
-            if (seconds < 10) {
-                seconds = "0" + seconds;
-            }
-            if (minutes < 10) {
-                minutes = "0" + minutes;
-            }
-            if (hours < 10) {
-                hours = "0" + hours;
-            }
-            motherships = motherships.slice(0, mothershipDigits);
-            if (motherships.length != 0) {
-                motherships = "." + motherships;
-            }
-            var time = "[" + hours + ":" + minutes + ":" + seconds + motherships + "]";
-            const messageTimeElement = document.createElement('span');
-            messageTimeElement.classList.add = "chat-message-time";
-            messageTimeElement.style.color = "rgb(130, 130, 130)";
-            messageTimeElement.style.fontSize = "12px";
-            messageTimeElement.style.marginRight = "5px";
-            messageTimeElement.style.marginBottom = "1px";
-            messageTimeElement.innerHTML = time;
 
-            if (messageTimeRainbow) {
-                var colorCode = newMessage.parentElement.childElementCount % 8;
-                switch (colorCode) {
-                    case 1:
-                        messageTimeElement.style.color = "red";
-                        break;
+                const newMessage = messageList.lastChild;
+                const now = new Date();
+                var seconds = now.getSeconds();
+                var minutes = now.getMinutes();
+                var hours = now.getHours();
+                var motherships = now.getMilliseconds();
 
-                    case 2:
-                        messageTimeElement.style.color = "darkorange";
-                        break;
-
-                    case 3:
-                        messageTimeElement.style.color = "yellow";
-                        break;
-
-                    case 4:
-                        messageTimeElement.style.color = "green";
-                        break;
-
-                    case 5:
-                        messageTimeElement.style.color = "cyan";
-                        break;
-
-                    case 6:
-                        messageTimeElement.style.color = "dodgerblue";
-                        break;
-
-                    case 7:
-                        messageTimeElement.style.color = "blueviolet";
-                        break;
-
-                    case 0:
-                        messageTimeElement.style.color = "magenta";
-                        break;
+                motherships = motherships.toString();
+                if (motherships.length == 1) {
+                    motherships = "00" + motherships;
                 }
+                else if (motherships.length == 2) {
+                    motherships = "0" + motherships;
+                }
+                if (seconds < 10) {
+                    seconds = "0" + seconds;
+                }
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
+                }
+                if (hours < 10) {
+                    hours = "0" + hours;
+                }
+                motherships = motherships.slice(0, mothershipDigits);
+                if (motherships.length != 0) {
+                    motherships = "." + motherships;
+                }
+                var time = "[" + hours + ":" + minutes + ":" + seconds + motherships + "]";
+                const messageTimeElement = document.createElement('span');
+                messageTimeElement.classList.add = "chat-message-time";
+                messageTimeElement.style.color = "rgb(130, 130, 130)";
+                messageTimeElement.style.fontSize = "12px";
+                messageTimeElement.style.marginRight = "5px";
+                messageTimeElement.style.marginBottom = "1px";
+                messageTimeElement.innerHTML = time;
+
+                if (rainbowTime) {
+                    var colorCode = newMessage.parentElement.childElementCount % 8;
+                    switch (colorCode) {
+                        case 1:
+                            messageTimeElement.style.color = "red";
+                            break;
+
+                        case 2:
+                            messageTimeElement.style.color = "darkorange";
+                            break;
+
+                        case 3:
+                            messageTimeElement.style.color = "yellow";
+                            break;
+
+                        case 4:
+                            messageTimeElement.style.color = "green";
+                            break;
+
+                        case 5:
+                            messageTimeElement.style.color = "cyan";
+                            break;
+
+                        case 6:
+                            messageTimeElement.style.color = "dodgerblue";
+                            break;
+
+                        case 7:
+                            messageTimeElement.style.color = "blueviolet";
+                            break;
+
+                        case 0:
+                            messageTimeElement.style.color = "magenta";
+                            break;
+                    }
+                }
+                try {
+                    newMessage.prepend(messageTimeElement);
+                } catch (thisRatio) { };
+
             }
-            newMessage.prepend(messageTimeElement);
         }
     };
     const observer = new MutationObserver(callback);
@@ -343,4 +384,36 @@ function oldChatStyling() {
     ss.insertRule('.message-from {font-size: 14px !important;}', 0);
     ss.insertRule('.message-from-name {font-size: 14px !important;}', 0);
     ss.insertRule('.message-row {align-items: baseline !important;}', 0);
+}
+
+function addOptionsMenu() {
+    let optionsDiv = document.createElement("div");
+    optionsDiv.id = "ext-options-div";
+    optionsDiv.style.position = "absolute";
+    optionsDiv.style.textAlign = "left";
+    optionsDiv.style.width = "200px";
+    optionsDiv.style.height = "300px";
+    optionsDiv.style.top = "60px";
+    optionsDiv.style.backgroundColor = "rgb(0,0,0,.5)";
+    optionsDiv.style.color = "white"
+    optionsDiv.innerHTML = `
+       <label for="messageTimeCheckBox">Display Message Time:</label> 
+       <input type="checkbox" id="messageTimeCheckBox">
+       <label for="rainbowTimeCheckBox">Rainbow Message Time:</label> 
+       <input type="checkbox" id="rainbowTimeCheckBox">
+       `;
+    document.getElementById("overlay").append(optionsDiv);
+
+    document.getElementById("messageTimeCheckBox").checked = messageTime;
+    document.getElementById("messageTimeCheckBox").onclick = function () {
+        messageTime = this.checked;
+        localStorage.setItem("messageTime", messageTime);
+
+    }
+    document.getElementById("rainbowTimeCheckBox").checked = rainbowTime;
+    document.getElementById("rainbowTimeCheckBox").onclick = function () {
+        rainbowTime = !rainbowTime;
+        // localStorage.setItem("rainbowTime", rainbowTime);
+    }
+
 }
