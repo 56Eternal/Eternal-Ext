@@ -5,7 +5,7 @@ socialContainer.style.width = "auto";
 
 //setting variables
 var amountRulesAdded = 0;
-var theme = 1; //0 = default, 1 = purple, 2 = wine red, 3 = petrol, 4 = cyan, 5 = brown, 6 = cactus, 7 = misavers, 8 = quotes, 9 = transparent, 10=flashing
+var theme = 0; 
 if (localStorage.getItem("theme") != null) {
     theme = parseInt(localStorage.getItem("theme"));
 }
@@ -46,12 +46,18 @@ if (localStorage.getItem("messageTime") != null) {
     }
 }
 
+var mothershipDigits = 1;
+if (localStorage.getItem("mothershipDigits") != null) {
+    mothershipDigits = parseInt(localStorage.getItem("mothershipDigits"));
+}
+
+
 
 updateTheme();
 if (adblocker) {
     lowerPlayerData();
 }
-if(oldChatStyling) {
+if (oldChatStyling) {
     makeOldChatStyling();
 }
 addChangeThemeButton();
@@ -91,8 +97,9 @@ function lowerPlayerData() {
 
 
 function addChangeThemeButton() {
+
     //Change Theme parent button
-    var amountThemes = 11;
+    var amountThemes = 14;
     const themeButton = document.createElement('div');
     themeButton.id = "theme-button";
     themeButton.style.display = "flex";
@@ -258,7 +265,55 @@ function updateTheme() {
             ss.insertRule('.fade-box {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
             amountRulesAdded = 1;
             break;
-        
+
+        case 11:
+            //blue black
+            //for overlay: top left gradient color darkened 90%
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #009eff !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 16, 25, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+        case 12:
+            //red black
+            //for overlay: top left gradient color darkened 90%
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #ff0000 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(25, 0, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+            case 13:
+            //orange black 2
+            //for overlay: top left gradient color darkened 90%
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #ff4c00 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(25, 8, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+
+
+        //unused 1
+            case 443534:
+            //red black 2
+            //for overlay: top left gradient color darkened 80%
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #960000 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(30, 0, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 1);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 2);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 3);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 4);
+            amountRulesAdded = 5;
+            break;
+
+
         default:
             console.log("UHFEHUIFKRRZBIGHK");
     }
@@ -314,7 +369,6 @@ function addGiantChatButton() {
 function addTimeToMessages() {
     const messageList = document.querySelector(".message-list");
     const config = { attributes: false, childList: true, subtree: false };
-    var mothershipDigits = 1;
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
             if (messageTime) {
@@ -429,6 +483,10 @@ function addOptionsMenu() {
        <input type="checkbox" id="adblockerCheckBox"><br>
        <label for="oldChatStylingCheckBox" title="Changes the look of the chat to how it was before update 94df. Reload Page to apply changes.">Old Chat Styling:</label> 
        <input type="checkbox" id="oldChatStylingCheckBox"><br>
+       <label for="mothershipDigitsSlider" title="Changes the amount of millisecond digits displayed on chat message time">Millisecond digits:</label> 
+       <input type="range" min="0" max="3" value="0" id="mothershipDigitsSlider">
+       <span id="mothershipDigitsDisplay">0
+       <br>
        `;
     document.getElementById("overlay").append(optionsDiv);
 
@@ -453,4 +511,15 @@ function addOptionsMenu() {
         oldChatStyling = !oldChatStyling;
         localStorage.setItem("oldChatStyling", oldChatStyling);
     }
+
+    var msDigitsSlider = document.getElementById("mothershipDigitsSlider");
+
+    msDigitsSlider.value = mothershipDigits;
+    document.getElementById("mothershipDigitsDisplay").innerHTML = mothershipDigits;
+    msDigitsSlider.oninput = function () {
+        mothershipDigits = msDigitsSlider.value;
+        document.getElementById("mothershipDigitsDisplay").innerHTML = mothershipDigits;
+        localStorage.setItem("mothershipDigits", mothershipDigits);
+    }
+
 }
