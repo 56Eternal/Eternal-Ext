@@ -5,75 +5,76 @@ socialContainer.style.width = "auto";
 
 //setting variables
 var amountRulesAdded = 0;
-var theme = 0; 
+var theme = 0;
+
 if (localStorage.getItem("theme") != null) {
     theme = parseInt(localStorage.getItem("theme"));
 }
-var oldChatStyling = true;
-if (localStorage.getItem("oldChatStyling") != null) {
-    if (localStorage.getItem("oldChatStyling") == "true") {
-        oldChatStyling = true;
-    }
-    else {
-        oldChatStyling = false;
-    }
-}
 var adblocker = false;
 if (localStorage.getItem("adblocker") != null) {
-    if (localStorage.getItem("adblocker") == "true") {
-        adblocker = true;
-    }
-    else {
-        adblocker = false;
-    }
+    adblocker = localStorage.getItem("adblocker") === "true";
+}
+var oldChatStyling = true;
+if (localStorage.getItem("oldChatStyling") != null) {
+    oldChatStyling = localStorage.getItem("oldChatStyling") === "true";
 }
 var rainbowTime = false;
 if (localStorage.getItem("rainbowTime") != null) {
-    if (localStorage.getItem("rainbowTime") == "true") {
-        rainbowTime = true;
-    }
-    else {
-        rainbowTime = false;
-    }
+    rainbowTime = localStorage.getItem("rainbowTime") === "true";
 }
 var messageTime = true;
 if (localStorage.getItem("messageTime") != null) {
-    if (localStorage.getItem("messageTime") == "true") {
-        messageTime = true;
-    }
-    else {
-        messageTime = false;
-    }
+    messageTime = localStorage.getItem("messageTime") === "true";
 }
-
 var mothershipDigits = 1;
 if (localStorage.getItem("mothershipDigits") != null) {
     mothershipDigits = parseInt(localStorage.getItem("mothershipDigits"));
 }
-
-
+var rainbowText = false;
+if (localStorage.getItem("rainbowText") != null) {
+    rainbowText = localStorage.getItem("rainbowText") === "true";
+}
 
 updateTheme();
+addChangeThemeButton();
 if (adblocker) {
     lowerPlayerData();
 }
 if (oldChatStyling) {
     makeOldChatStyling();
 }
-addChangeThemeButton();
 addGiantChatButton();
 addTimeToMessages();
 addOptionsMenu();
-addTheme10();
+addAnimations();
+if (rainbowText) {
+    makeRainbowText();
+}
 
 
-function addTheme10() {
+function addAnimations() {
     var css = document.createElement("style");
     css.appendChild(document.createTextNode(`
 @keyframes menuFlashing {
     0%   {background: white;}
   100%  {background: black;}
-
+  }  
+@keyframes colorRotate {
+    from {
+      color: #6666ff;
+    }
+    10% {
+      color: #0099ff;
+    }
+    50% {
+      color: #00ff00;
+    }
+    75% {
+      color: #ff3399;
+    }
+    100% {
+      color: #6666ff;
+    }
   }
 #theme-plus:hover{
     background:#007777;
@@ -164,6 +165,7 @@ function addChangeThemeButton() {
 
 
 function updateTheme() {
+    misaversUrl = "https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145";
     for (let i = 0; i < amountRulesAdded; i++) {
         ss.deleteRule(0);
     }
@@ -235,19 +237,19 @@ function updateTheme() {
 
         case 7:
             //misavers
-            ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 0);
+            ss.insertRule('::-webkit-scrollbar-thumb {background: url(' + misaversUrl + ') !important;}', 0);
             ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 4);
+            ss.insertRule('.fade-box {background: url(background: url(' + misaversUrl + ') !important;}', 2);
+            ss.insertRule('.replay-list-header {background: url(' + misaversUrl + ') !important;}', 3);
+            ss.insertRule('.swal2-popup {background: url(' + misaversUrl + ') !important;}', 4);
             amountRulesAdded = 5;
             break;
 
         case 8:
             //quotes
-            ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 0);
-            ss.insertRule('.fade-box {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 1);
-            ss.insertRule('.swal2-popup {background: url(https://media.discordapp.net/attachments/1041104770758344814/1074257122302373968/misavers.png?width=200&height=145) !important;}', 2);
+            ss.insertRule('::-webkit-scrollbar-thumb {background: url(' + misaversUrl + ') !important;}', 0);
+            ss.insertRule('.fade-box {background: url(' + misaversUrl + ') !important;}', 1);
+            ss.insertRule('.swal2-popup {background: url(' + misaversUrl + ') !important;}', 2);
             ss.insertRule('.replay-list-header {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074337213061541970/image.png) !important;}', 3);
             ss.insertRule('.replay-list {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074340235518947408/replay-list.png) !important;}', 4);
             amountRulesAdded = 5;
@@ -257,7 +259,6 @@ function updateTheme() {
             ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 0);
             ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 1);
             ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 2);
-
             amountRulesAdded = 3;
             break;
 
@@ -288,7 +289,7 @@ function updateTheme() {
             amountRulesAdded = 5;
             break;
 
-            case 13:
+        case 13:
             //orange black 2
             //for overlay: top left gradient color darkened 90%
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #ff4c00 !important;}', 0);
@@ -300,9 +301,8 @@ function updateTheme() {
             break;
 
 
-
         //unused 1
-            case 443534:
+        case 443534:
             //red black 2
             //for overlay: top left gradient color darkened 80%
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #960000 !important;}', 0);
@@ -449,7 +449,6 @@ function addTimeToMessages() {
                 try {
                     newMessage.prepend(messageTimeElement);
                 } catch (thisRatio) { };
-
             }
         }
     };
@@ -459,9 +458,9 @@ function addTimeToMessages() {
 }
 
 function makeOldChatStyling() {
-    ss.insertRule('.message-from {font-size: 14px !important;}', 1000);
-    ss.insertRule('.message-from-name {font-size: 14px !important;}', 1000);
-    ss.insertRule('.message-row {align-items: baseline !important;}', 1000);
+    ss.insertRule('.message-from {font-size: 14px !important;}', 100);
+    ss.insertRule('.message-from-name {font-size: 14px !important;}', 100);
+    ss.insertRule('.message-row {align-items: baseline !important;}', 100);
 }
 
 function addOptionsMenu() {
@@ -483,6 +482,8 @@ function addOptionsMenu() {
        <input type="checkbox" id="adblockerCheckBox"><br>
        <label for="oldChatStylingCheckBox" title="Changes the look of the chat to how it was before update 94df. Reload Page to apply changes.">Old Chat Styling:</label> 
        <input type="checkbox" id="oldChatStylingCheckBox"><br>
+       <label for="rainbowTextCheckBox" title="Changes the menu text color to be animated. Reload Page to apply changes.">Rainbow Text:</label> 
+       <input type="checkbox" id="rainbowTextCheckBox"><br>
        <label for="mothershipDigitsSlider" title="Changes the amount of millisecond digits displayed on chat message time">Millisecond digits:</label> 
        <input type="range" min="0" max="3" value="0" id="mothershipDigitsSlider">
        <span id="mothershipDigitsDisplay">0
@@ -522,4 +523,16 @@ function addOptionsMenu() {
         localStorage.setItem("mothershipDigits", mothershipDigits);
     }
 
+    document.getElementById("rainbowTextCheckBox").checked = rainbowText;
+    document.getElementById("rainbowTextCheckBox").onclick = function () {
+        rainbowText = !rainbowText;
+        localStorage.setItem("rainbowText", rainbowText);
+    }
+
+}
+
+function makeRainbowText() {
+    ss.insertRule('.fade-box {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100)
+    ss.insertRule('.replay-list-header {animation: colorRotate 6s linear 0s infinite !important;}', 100);
+    ss.insertRule('.swal2-title {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100);
 }
