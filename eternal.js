@@ -536,3 +536,14 @@ function makeRainbowText() {
     ss.insertRule('.replay-list-header {animation: colorRotate 6s linear 0s infinite !important;}', 100);
     ss.insertRule('.swal2-title {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100);
 }
+function createPopup() {
+    let popup = document.createElement("div");
+    popup.classList = "swal2-container swal2-top"
+    popup.style.overflowY = "auto";
+    popup.style.zIndex = "-1";
+    popup.innerHTML=`
+    <div aria-labelledby="swal2-title" aria-describedby="swal2-content" class="swal2-popup swal2-toast swal2-show" tabindex="-1" role="alert" aria-live="polite" style="display: flex;">
+    <div class="swal2-header">
+    </div><div class="swal2-icon swal2-question" style="display: none;"></div><div class="swal2-icon swal2-warning" style="display: none;"></div><div class="swal2-icon swal2-info" style="display: none;"></div><div class="swal2-icon swal2-success" style="display: none;"><div class="swal2-success-circular-line-left" style="background-color: rgba(0, 0, 0, 0);"></div><span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span><div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgba(0, 0, 0, 0);"></div><div class="swal2-success-circular-line-right" style="background-color: rgba(0, 0, 0, 0);"></div></div><img class="swal2-image" style="display: none;"><h2 class="swal2-title" id="swal2-title" style="display: flex;">Wow that is a good clip</h2><button type="button" class="swal2-close" aria-label="Close this dialog" style="display: flex;">×</button></div><div class="swal2-content"><div id="swal2-content" style="display: none;"></div><input class="swal2-input" style="display: none;"><input type="file" class="swal2-file" style="display: none;"><div class="swal2-range" style="display: none;"><input type="range"><output></output></div><select class="swal2-select" style="display: none;"></select><div class="swal2-radio" style="display: none;"></div><label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox"><span class="swal2-label"></span></label><textarea class="swal2-textarea" style="display: none;"></textarea><div class="swal2-validation-message" id="swal2-validation-message"></div></div><div class="swal2-actions" style="display: none;"><button type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: none; border-left-color: rgb(224, 142, 19); border-right-color: rgb(224, 142, 19);">OK</button><button type="button" class="swal2-cancel swal2-styled" aria-label="" style="display: none;">Cancel</button></div><div class="swal2-footer" style="display: none;"></div></div>`
+    document.getElementById("overlay").append(popup);
+}
