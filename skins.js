@@ -23,3 +23,8 @@ css.appendChild(document.createTextNode(`
 
 `));
 document.head.appendChild(css);
+
+
+setTimeout(function(){
+  document.querySelector(".selected").innerHTML += " (" + document.querySelectorAll(".skin").length + ")";
+}, 300);
