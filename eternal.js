@@ -453,7 +453,6 @@ function addTimeToMessages() {
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
             if (messageTime) {
-                document.getElementById("chatbox-input").setAttribute("placeholder", "Messages in chat: " + messageList.childElementCount);
                 oldChildElementCount = messageList.childElementCount;
                 var messageTimeElement = createTimeStamp();
                 const newMessage = messageList.lastChild;
