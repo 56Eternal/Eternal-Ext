@@ -361,16 +361,12 @@ function addGiantChatButton() {
             chatbox.style.height = "830px";
             tateSizeChat = true;
         }
-        // console.log("Theme: " + theme + ", amount rules added: " + amountRulesAdded);
-        // console.log(ss.cssRules);
-        // console.log(document.querySelector(".message-list").children.length);
     }
 }
 
 //messages show time posted
 function addTimeToMessages() {
     var colorCode = 1;
-    var timeStampCount = 1
     function createTimeStamp() {
         const now = new Date();
         var seconds = now.getSeconds();
@@ -401,13 +397,10 @@ function addTimeToMessages() {
         var time = "[" + hours + ":" + minutes + ":" + seconds + motherships + "]";
         const messageTimeElement = document.createElement('span');
         messageTimeElement.classList = "chat-message-time";
-        messageTimeElement.id = "timestamp-" + timeStampCount;
-        timeStampCount++;
         messageTimeElement.style.fontSize = "12px";
         messageTimeElement.style.marginRight = "5px";
         messageTimeElement.style.marginBottom = "1px";
         messageTimeElement.innerHTML = time;
-        const newMessage = messageList.lastChild;
         if (rainbowTime) {
             switch (colorCode) {
                 case 1:
@@ -460,8 +453,8 @@ function addTimeToMessages() {
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
             if (messageTime) {
+                document.getElementById("chatbox-input").setAttribute("placeholder", "Messages in chat: " + messageList.childElementCount);
                 oldChildElementCount = messageList.childElementCount;
-
                 var messageTimeElement = createTimeStamp();
                 const newMessage = messageList.lastChild;
                 try {
@@ -470,7 +463,6 @@ function addTimeToMessages() {
                     console.log("caught this ratio");
                 };
                 if (firstTime) {
-                    document.getElementById("chatbox-input").setAttribute("placeholder", "Messages in chat: " + messageList.childElementCount);
                     fixTimestampsAfterFullChat();
                     firstTime = !firstTime;
 
@@ -485,28 +477,23 @@ function addTimeToMessages() {
     function fixTimestampsAfterFullChat() {
         const toObserve = messageList;
         const observer2 = new MutationObserver((mutationsList) => {
-
             if (toObserve.childElementCount == oldChildElementCount) {
                 cascadeTimestamps();
             }
-
         });
         observer2.observe(toObserve, { subtree: true, characterData: true });
     }
 
     function cascadeTimestamps() {
-        // for (let i = 0; i < 99; i++) {
-        //     messageList.childNodes[i].firstChild.innerHTML = messageList.childNodes[i + 1].firstChild.innerHTML;
-        // }
-        for (let i = 1; i <= 99; i++) {
-            document.getElementById("timestamp-" + i).innerHTML = document.getElementById("timestamp-" + (i + 1)).innerHTML;
-            document.getElementById("timestamp-" + i).style.color = document.getElementById("timestamp-" + (i + 1)).style.color;
+        for (let i = 0; i < 99; i++) {
+            messageList.childNodes[i].firstChild.innerHTML = messageList.childNodes[i + 1].firstChild.innerHTML;
+            messageList.childNodes[i].firstChild.style.color = messageList.childNodes[i + 1].firstChild.style.color;
         }
         var messageTimeElement = createTimeStamp();
         const newMessage = messageList.lastChild;
         try {
-            newMessage.children[0].innerHTML = messageTimeElement.innerHTML;
-            newMessage.children[0].style.color = messageTimeElement.style.color;
+            newMessage.prepend(messageTimeElement);
+            newMessage.childNodes[1].remove();
         } catch (thisRatio) {
             console.log(thisRatio);
         };
