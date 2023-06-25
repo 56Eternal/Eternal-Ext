@@ -2,6 +2,7 @@
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
+const messageList = document.querySelector(".message-list");
 
 //setting variables
 var amountRulesAdded = 0;
@@ -362,100 +363,160 @@ function addGiantChatButton() {
         }
         // console.log("Theme: " + theme + ", amount rules added: " + amountRulesAdded);
         // console.log(ss.cssRules);
+        // console.log(document.querySelector(".message-list").children.length);
     }
 }
 
 //messages show time posted
 function addTimeToMessages() {
-    const messageList = document.querySelector(".message-list");
+    var colorCode = 1;
+    var timeStampCount = 1
+    function createTimeStamp() {
+        const now = new Date();
+        var seconds = now.getSeconds();
+        var minutes = now.getMinutes();
+        var hours = now.getHours();
+        var motherships = now.getMilliseconds();
+
+        motherships = motherships.toString();
+        if (motherships.length == 1) {
+            motherships = "00" + motherships;
+        }
+        else if (motherships.length == 2) {
+            motherships = "0" + motherships;
+        }
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        if (hours < 10) {
+            hours = "0" + hours;
+        }
+        motherships = motherships.slice(0, mothershipDigits);
+        if (motherships.length != 0) {
+            motherships = "." + motherships;
+        }
+        var time = "[" + hours + ":" + minutes + ":" + seconds + motherships + "]";
+        const messageTimeElement = document.createElement('span');
+        messageTimeElement.classList = "chat-message-time";
+        messageTimeElement.id = "timestamp-" + timeStampCount;
+        timeStampCount++;
+        messageTimeElement.style.fontSize = "12px";
+        messageTimeElement.style.marginRight = "5px";
+        messageTimeElement.style.marginBottom = "1px";
+        messageTimeElement.innerHTML = time;
+        const newMessage = messageList.lastChild;
+        if (rainbowTime) {
+            switch (colorCode) {
+                case 1:
+                    messageTimeElement.style.color = "red";
+                    break;
+
+                case 2:
+                    messageTimeElement.style.color = "darkorange";
+                    break;
+
+                case 3:
+                    messageTimeElement.style.color = "yellow";
+                    break;
+
+                case 4:
+                    messageTimeElement.style.color = "green";
+                    break;
+
+                case 5:
+                    messageTimeElement.style.color = "cyan";
+                    break;
+
+                case 6:
+                    messageTimeElement.style.color = "dodgerblue";
+                    break;
+
+                case 7:
+                    messageTimeElement.style.color = "blueviolet";
+                    break;
+
+                case 0:
+                    messageTimeElement.style.color = "magenta";
+                    break;
+            }
+            colorCode = (colorCode + 1) % 8;
+        }
+
+        else {
+            messageTimeElement.style.color = "rgb(130, 130, 130)";
+        }
+        return messageTimeElement;
+    }
+
+
+
+
+    var firstTime = true;
+    var oldChildElementCount;
     const config = { attributes: false, childList: true, subtree: false };
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
             if (messageTime) {
+                oldChildElementCount = messageList.childElementCount;
 
-
+                var messageTimeElement = createTimeStamp();
                 const newMessage = messageList.lastChild;
-                const now = new Date();
-                var seconds = now.getSeconds();
-                var minutes = now.getMinutes();
-                var hours = now.getHours();
-                var motherships = now.getMilliseconds();
-
-                motherships = motherships.toString();
-                if (motherships.length == 1) {
-                    motherships = "00" + motherships;
-                }
-                else if (motherships.length == 2) {
-                    motherships = "0" + motherships;
-                }
-                if (seconds < 10) {
-                    seconds = "0" + seconds;
-                }
-                if (minutes < 10) {
-                    minutes = "0" + minutes;
-                }
-                if (hours < 10) {
-                    hours = "0" + hours;
-                }
-                motherships = motherships.slice(0, mothershipDigits);
-                if (motherships.length != 0) {
-                    motherships = "." + motherships;
-                }
-                var time = "[" + hours + ":" + minutes + ":" + seconds + motherships + "]";
-                const messageTimeElement = document.createElement('span');
-                messageTimeElement.classList.add = "chat-message-time";
-                messageTimeElement.style.color = "rgb(130, 130, 130)";
-                messageTimeElement.style.fontSize = "12px";
-                messageTimeElement.style.marginRight = "5px";
-                messageTimeElement.style.marginBottom = "1px";
-                messageTimeElement.innerHTML = time;
-
-                if (rainbowTime) {
-                    var colorCode = newMessage.parentElement.childElementCount % 8;
-                    switch (colorCode) {
-                        case 1:
-                            messageTimeElement.style.color = "red";
-                            break;
-
-                        case 2:
-                            messageTimeElement.style.color = "darkorange";
-                            break;
-
-                        case 3:
-                            messageTimeElement.style.color = "yellow";
-                            break;
-
-                        case 4:
-                            messageTimeElement.style.color = "green";
-                            break;
-
-                        case 5:
-                            messageTimeElement.style.color = "cyan";
-                            break;
-
-                        case 6:
-                            messageTimeElement.style.color = "dodgerblue";
-                            break;
-
-                        case 7:
-                            messageTimeElement.style.color = "blueviolet";
-                            break;
-
-                        case 0:
-                            messageTimeElement.style.color = "magenta";
-                            break;
-                    }
-                }
                 try {
                     newMessage.prepend(messageTimeElement);
-                } catch (thisRatio) { };
+                } catch (thisRatio) {
+                    console.log("caught this ratio");
+                };
+                if (firstTime) {
+                    document.getElementById("chatbox-input").setAttribute("placeholder", "Messages in chat: " + messageList.childElementCount);
+                    fixTimestampsAfterFullChat();
+                    firstTime = !firstTime;
+
+                }
             }
         }
     };
     const observer = new MutationObserver(callback);
     observer.observe(messageList, config);
 
+
+    function fixTimestampsAfterFullChat() {
+        const toObserve = messageList;
+        const observer2 = new MutationObserver((mutationsList) => {
+
+            if (toObserve.childElementCount == oldChildElementCount) {
+                cascadeTimestamps();
+            }
+
+        });
+        observer2.observe(toObserve, { subtree: true, characterData: true });
+    }
+
+    function cascadeTimestamps() {
+        // for (let i = 0; i < 99; i++) {
+        //     messageList.childNodes[i].firstChild.innerHTML = messageList.childNodes[i + 1].firstChild.innerHTML;
+        // }
+        for (let i = 1; i <= 99; i++) {
+            document.getElementById("timestamp-" + i).innerHTML = document.getElementById("timestamp-" + (i + 1)).innerHTML;
+            document.getElementById("timestamp-" + i).style.color = document.getElementById("timestamp-" + (i + 1)).style.color;
+        }
+        var messageTimeElement = createTimeStamp();
+        const newMessage = messageList.lastChild;
+        try {
+            newMessage.children[0].innerHTML = messageTimeElement.innerHTML;
+            newMessage.children[0].style.color = messageTimeElement.style.color;
+        } catch (thisRatio) {
+            console.log(thisRatio);
+        };
+
+    }
+
+
 }
+
+
 
 function makeOldChatStyling() {
     ss.insertRule('.message-from {font-size: 14px !important;}', 100);
@@ -474,20 +535,20 @@ function addOptionsMenu() {
     optionsDiv.style.backgroundColor = "rgb(0,0,0,.5)";
     optionsDiv.style.color = "white"
     optionsDiv.innerHTML = `
-       <label for="messageTimeCheckBox" title="Shows the time a message in chat was sent along with the message.">Display Message Time:</label> 
-       <input type="checkbox" id="messageTimeCheckBox"><br>
-       <label for="rainbowTimeCheckBox" title="time the message was sent is displayed in rainbow colors.">Rainbow Message Time:</label> 
-       <input type="checkbox" id="rainbowTimeCheckBox"><br>
-       <label for="adblockerCheckBox" title="For people who use an adblocker which moves the name field, play button etc. to the top of the menu. Reload Page to apply changes.">Using adblocker:</label> 
-       <input type="checkbox" id="adblockerCheckBox"><br>
-       <label for="oldChatStylingCheckBox" title="Changes the look of the chat to how it was before update 94df. Reload Page to apply changes.">Old Chat Styling:</label> 
-       <input type="checkbox" id="oldChatStylingCheckBox"><br>
-       <label for="rainbowTextCheckBox" title="Changes the menu text color to be animated. Reload Page to apply changes.">Rainbow Text:</label> 
-       <input type="checkbox" id="rainbowTextCheckBox"><br>
-       <label for="mothershipDigitsSlider" title="Changes the amount of millisecond digits displayed on chat message time">Millisecond digits:</label> 
-       <input type="range" min="0" max="3" value="0" id="mothershipDigitsSlider">
-       <span id="mothershipDigitsDisplay">0
-       <br>
+    <label id="label-test-id" for="messageTimeCheckBox" tip="Shows the time a message in chat was sent along with the message.">Display Message Time:</label> 
+    <input type="checkbox" id="messageTimeCheckBox"><br>
+    <label for="rainbowTimeCheckBox" tip="time the message was sent is displayed in rainbow colors.">Rainbow Message Time:</label> 
+    <input type="checkbox" id="rainbowTimeCheckBox"><br>
+    <label for="adblockerCheckBox" tip="For people who use an adblocker which moves the name field, play button etc. to the top of the menu. Reload page to apply changes.">Using adblocker:</label> 
+    <input type="checkbox" id="adblockerCheckBox"><br>
+    <label for="oldChatStylingCheckBox" tip="Changes the look of the chat to how it was before update 94df. Reload page to apply changes.">Old Chat Styling:</label> 
+    <input type="checkbox" id="oldChatStylingCheckBox"><br>
+    <label for="rainbowTextCheckBox" tip="Changes the menu text color to be animated. Reload page to apply changes.">Rainbow Text:</label> 
+    <input type="checkbox" id="rainbowTextCheckBox"><br>
+    <label for="mothershipDigitsSlider" tip="Changes the amount of millisecond digits displayed on chat message time">Millisecond digits:</label> 
+    <input type="range" min="0" max="3" value="0" id="mothershipDigitsSlider">
+    <span id="mothershipDigitsDisplay">0
+    <br>
        `;
     document.getElementById("overlay").append(optionsDiv);
 
@@ -541,7 +602,7 @@ function createPopup() {
     popup.classList = "swal2-container swal2-top"
     popup.style.overflowY = "auto";
     popup.style.zIndex = "-1";
-    popup.innerHTML=`
+    popup.innerHTML = `
     <div aria-labelledby="swal2-title" aria-describedby="swal2-content" class="swal2-popup swal2-toast swal2-show" tabindex="-1" role="alert" aria-live="polite" style="display: flex;">
     <div class="swal2-header">
     </div><div class="swal2-icon swal2-question" style="display: none;"></div><div class="swal2-icon swal2-warning" style="display: none;"></div><div class="swal2-icon swal2-info" style="display: none;"></div><div class="swal2-icon swal2-success" style="display: none;"><div class="swal2-success-circular-line-left" style="background-color: rgba(0, 0, 0, 0);"></div><span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span><div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgba(0, 0, 0, 0);"></div><div class="swal2-success-circular-line-right" style="background-color: rgba(0, 0, 0, 0);"></div></div><img class="swal2-image" style="display: none;"><h2 class="swal2-title" id="swal2-title" style="display: flex;">Wow that is a good clip</h2><button type="button" class="swal2-close" aria-label="Close this dialog" style="display: flex;">×</button></div><div class="swal2-content"><div id="swal2-content" style="display: none;"></div><input class="swal2-input" style="display: none;"><input type="file" class="swal2-file" style="display: none;"><div class="swal2-range" style="display: none;"><input type="range"><output></output></div><select class="swal2-select" style="display: none;"></select><div class="swal2-radio" style="display: none;"></div><label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox"><span class="swal2-label"></span></label><textarea class="swal2-textarea" style="display: none;"></textarea><div class="swal2-validation-message" id="swal2-validation-message"></div></div><div class="swal2-actions" style="display: none;"><button type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: none; border-left-color: rgb(224, 142, 19); border-right-color: rgb(224, 142, 19);">OK</button><button type="button" class="swal2-cancel swal2-styled" aria-label="" style="display: none;">Cancel</button></div><div class="swal2-footer" style="display: none;"></div></div>`
