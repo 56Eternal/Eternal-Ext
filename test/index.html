@@ -1,0 +1,37 @@
+<html>
+
+<body>
+
+    <p id="p"><span>rtfgbtzfghb</span> </p>
+    <button onclick="clicked()">click me</button>
+
+
+
+    <script>
+        function clicked() {
+            document.getElementById("p").firstChild.innerHTML += "a";
+        }
+
+        const toObserve = document.getElementById("p").childNodes[0];
+        let initialText = toObserve.textContent;
+
+        // Create a MutationObserver to monitor changes in child nodes
+        const observer = new MutationObserver((mutationsList) => {
+            for (let mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    // Check if the text content has changed
+                    if (toObserve.textContent !== initialText) {
+                        console.log("changed!");
+                        initialText = toObserve.textContent; // Update the initial text content
+                    }
+                }
+            }
+        });
+
+        observer.observe(toObserve, { childList: true });
+
+    </script>
+
+</body>
+
+</html>
