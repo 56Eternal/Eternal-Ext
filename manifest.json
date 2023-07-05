@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "name": "Vanis.io Eternal Extension",
-    "description": "Probably the worst Vanis.io extension. Add time sent to messages, revert chat styling back to how it was, button to cycle through multiple menu themes, button to make chat bigger. Dc: eternal_8910",
-    "version": "1.7.4",
+    "description": "Probably the worst Vanis.io extension. Add time sent to messages, revert chat styling back to how it was, button to cycle through multiple menu themes, button to make chat bigger, Buttons to get and set skin list. Dc: eternal_8910",
+    "version": "1.8",
     "icons": {
         "16": "vanislogoblue.png",
         "48": "vanislogoblue.png",
