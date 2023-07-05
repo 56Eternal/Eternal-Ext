@@ -3,7 +3,34 @@ const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
 const messageList = document.querySelector(".message-list");
-
+let css = document.createElement("style");
+document.head.appendChild(css);
+css.appendChild(document.createTextNode(`
+    .vanis-menu-button {
+        background: #b1700f;
+        border: 0;
+        border-radius: 4px;
+        box-shadow: 0 0 1px 1px #000;
+        color: #dadada;
+        cursor: pointer;
+        font-size: 16px;
+        outline: none;
+        padding: 5px 9px;
+        text-shadow: 1px 1px 2px #000;
+    }
+    .vanis-menu-tf {
+        background: rgba(0,0,0,.5);
+        border: 1px solid #000;
+        border-radius: 4px;
+        box-sizing: border-box;
+        color: #dadada;
+        display: block;
+        outline: 0;
+        padding: 5px;
+        width: 100%;
+    
+    }`
+));
 //setting variables
 var amountRulesAdded = 0;
 var theme = 0;
@@ -44,17 +71,17 @@ if (adblocker) {
 if (oldChatStyling) {
     makeOldChatStyling();
 }
+addOptionsMenu();
 addGiantChatButton();
 addTimeToMessages();
-addOptionsMenu();
 addAnimations();
 if (rainbowText) {
     makeRainbowText();
 }
+addExtOptionsToggleButton();
 
 
 function addAnimations() {
-    var css = document.createElement("style");
     css.appendChild(document.createTextNode(`
 @keyframes menuFlashing {
     0%   {background: white;}
@@ -85,12 +112,7 @@ function addAnimations() {
     background:#007777;
     transition:all .4s ease;
 }
-#giant-chat:hover{
-    background:#2b9047;
-    transition:all .4s ease;
-}
 `));
-    document.head.appendChild(css);
 }
 
 function lowerPlayerData() {
@@ -117,7 +139,7 @@ function addChangeThemeButton() {
     themeButtonText.id = "theme-button-text";
     themeButtonText.style.margin = "5px 0px";
     themeButtonText.innerHTML = "Theme " + theme;
-    themeButtonText.title = "hi";
+    themeButtonText.style.textDecoration = "underline";
     // themeButtonText.style.borderLeft = "1px solid black";
     // themeButtonText.style.borderRight = "1px solid black";
     themeButtonText.style.padding = "0px 5px";
@@ -325,31 +347,18 @@ function addGiantChatButton() {
     var chatbox = document.querySelector(".chatbox");
     var tateSizeChat = false;
     var originalHeight;
-    const newbutton2 = document.createElement('div');
+    const newbutton2 = document.createElement('button');
     newbutton2.id = "giant-chat";
-    newbutton2.style.background = "#32a852";
-    newbutton2.style.cursor = "pointer";
-    newbutton2.style.padding = "5px 15px";
-    newbutton2.style.textShadow = "1px 1px 2px #000";
-    newbutton2.style.borderRadius = "4px";
-    newbutton2.style.margin = "0px 4px";
-    newbutton2.style.boxShadow = '0 0 1px 1px #000';
-    newbutton2.style.textAlign = "center";
+    newbutton2.classList = "vanis-menu-button";
+
+
     newbutton2.innerHTML = "Giant Chat";
-    newbutton2.onmouseenter = function () {
-        this.style.background = "#2b9047";
-        this.style.transition = "0.2s";
-    }
-    newbutton2.onmouseleave = function () {
-        this.style.background = "#32a852";
-        this.style.transition = "0.2s";
-    }
     newbutton2.onclick = function () {
         makeChatTateSize();
     }
 
     socialContainer.style.width = "auto";
-    socialContainer.appendChild(newbutton2);
+    document.getElementById("ext-options-general").appendChild(newbutton2);
 
     function makeChatTateSize() {
         if (tateSizeChat) {
@@ -511,17 +520,26 @@ function makeOldChatStyling() {
 }
 
 function addOptionsMenu() {
+    //reorganize main menu
+    document.querySelector(".account-wrapper").style.gridRow = "2/3";
+    document.querySelector(".account-wrapper").nextElementSibling.style.gridRow = "3/4";
+    document.getElementById("main-container").style.gridTemplateColumns = "300px 330px 300px 250px";
     let optionsDiv = document.createElement("div");
-    optionsDiv.id = "ext-options-div";
-    optionsDiv.style.position = "absolute";
+    optionsDiv.id = "ext-options-menu";
+    optionsDiv.classList = "fade-box tab-menu";
+    optionsDiv.style.gridRow = "2/4";
     optionsDiv.style.textAlign = "left";
-    optionsDiv.style.width = "200px";
-    optionsDiv.style.height = "300px";
     optionsDiv.style.top = "60px";
     optionsDiv.style.backgroundColor = "rgb(0,0,0,.5)";
     optionsDiv.style.color = "white"
     optionsDiv.innerHTML = `
-    <label id="label-test-id" for="messageTimeCheckBox" tip="Shows the time a message in chat was sent along with the message.">Display Message Time:</label> 
+    <div class="tabs">
+    <div class="tab active" id="ext-options-tab-general">General</div>
+    <div class="tab" id="ext-options-tab-skins">Skins</div>
+    </div>
+
+    <div id="ext-options-general" style="padding: 16px;">
+    <label for="messageTimeCheckBox" tip="Shows the time a message in chat was sent along with the message.">Display Message Time:</label> 
     <input type="checkbox" id="messageTimeCheckBox"><br>
     <label for="rainbowTimeCheckBox" tip="time the message was sent is displayed in rainbow colors.">Rainbow Message Time:</label> 
     <input type="checkbox" id="rainbowTimeCheckBox"><br>
@@ -535,9 +553,18 @@ function addOptionsMenu() {
     <input type="range" min="0" max="3" value="0" id="mothershipDigitsSlider">
     <span id="mothershipDigitsDisplay">0
     <br>
+    </div>
+    <div id="ext-options-skins" style="padding: 16px; display: none;">
+    <p style="margin: 10px 0px;"> Set skin list:</p>
+    <input class="vanis-menu-tf" id="enter-skin-list-tf"></input>
+    </div>
        `;
-    document.getElementById("overlay").append(optionsDiv);
+    document.getElementById("main-container").append(optionsDiv);
 
+    optionsDiv.children[0].children[0].onclick = function () { openExtOptionsTab("general") };
+    optionsDiv.children[0].children[1].onclick = function () { openExtOptionsTab("skins") };
+
+    //general
     document.getElementById("messageTimeCheckBox").checked = messageTime;
     document.getElementById("messageTimeCheckBox").onclick = function () {
         messageTime = this.checked;
@@ -576,21 +603,95 @@ function addOptionsMenu() {
         localStorage.setItem("rainbowText", rainbowText);
     }
 
+
+    //skins
+    let copySkinListButton = document.createElement("button");
+    copySkinListButton.classList = "vanis-menu-button";
+    copySkinListButton.innerHTML = "Copy skin list to clipboard";
+    copySkinListButton.setAttribute("tip", "Click to copy your skin list to send it to someone else or save it somewhere secure.");
+    copySkinListButton.onclick = function () {
+        navigator.clipboard.writeText(localStorage.getItem("skins")).then(() => {
+                copySkinListButton.innerHTML = "Copied!"
+            },
+            () => {
+                copySkinListButton.innerHTML = "Failed copying skin list."
+            });
+        
+    }
+    document.getElementById("ext-options-skins").prepend(copySkinListButton);
+
+    let setSkinListButton = document.createElement("button");
+    setSkinListButton.style.margin = "10px 0px";
+    setSkinListButton.classList = "vanis-menu-button";
+    setSkinListButton.innerHTML = "Set";
+    setSkinListButton.setAttribute("tip", "Paste the skin list in the text field above and then click this button. Reload page to see the new skin list.")
+
+    setSkinListButton.onclick = function () {
+        try {
+            localStorage.setItem("skins", document.getElementById("enter-skin-list-tf").value);
+            setSkinListButton.innerHTML = "Skin list updated!";
+        } catch (error) {
+            setSkinListButton.value = "Error: not enough storage!";
+        }
+        
+    }
+    document.getElementById("ext-options-skins").append(setSkinListButton);
+
 }
+
+function openExtOptionsTab(tabName) {
+    const optionsDiv = document.getElementById("ext-options-menu");
+    const tabs = optionsDiv.children[0].children
+    for (let i = 0; i < tabs.length; i++) {
+        const tab = tabs[i];
+        tab.classList = "tab";
+        document.getElementById("ext-options-tab-" + tabName).classList = "tab active";
+        optionsDiv.children[i + 1].style.display = "none";
+        document.getElementById("ext-options-" + tabName).style.display = "block";
+
+    }
+
+    console.log(tabName);
+
+}
+
 
 function makeRainbowText() {
     ss.insertRule('.fade-box {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100)
     ss.insertRule('.replay-list-header {animation: colorRotate 6s linear 0s infinite !important;}', 100);
     ss.insertRule('.swal2-title {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100);
 }
-function createPopup() {
-    let popup = document.createElement("div");
-    popup.classList = "swal2-container swal2-top"
-    popup.style.overflowY = "auto";
-    popup.style.zIndex = "-1";
-    popup.innerHTML = `
-    <div aria-labelledby="swal2-title" aria-describedby="swal2-content" class="swal2-popup swal2-toast swal2-show" tabindex="-1" role="alert" aria-live="polite" style="display: flex;">
-    <div class="swal2-header">
-    </div><div class="swal2-icon swal2-question" style="display: none;"></div><div class="swal2-icon swal2-warning" style="display: none;"></div><div class="swal2-icon swal2-info" style="display: none;"></div><div class="swal2-icon swal2-success" style="display: none;"><div class="swal2-success-circular-line-left" style="background-color: rgba(0, 0, 0, 0);"></div><span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span><div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgba(0, 0, 0, 0);"></div><div class="swal2-success-circular-line-right" style="background-color: rgba(0, 0, 0, 0);"></div></div><img class="swal2-image" style="display: none;"><h2 class="swal2-title" id="swal2-title" style="display: flex;">Wow that is a good clip</h2><button type="button" class="swal2-close" aria-label="Close this dialog" style="display: flex;">×</button></div><div class="swal2-content"><div id="swal2-content" style="display: none;"></div><input class="swal2-input" style="display: none;"><input type="file" class="swal2-file" style="display: none;"><div class="swal2-range" style="display: none;"><input type="range"><output></output></div><select class="swal2-select" style="display: none;"></select><div class="swal2-radio" style="display: none;"></div><label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox"><span class="swal2-label"></span></label><textarea class="swal2-textarea" style="display: none;"></textarea><div class="swal2-validation-message" id="swal2-validation-message"></div></div><div class="swal2-actions" style="display: none;"><button type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: none; border-left-color: rgb(224, 142, 19); border-right-color: rgb(224, 142, 19);">OK</button><button type="button" class="swal2-cancel swal2-styled" aria-label="" style="display: none;">Cancel</button></div><div class="swal2-footer" style="display: none;"></div></div>`
-    document.getElementById("overlay").append(popup);
+function addExtOptionsToggleButton() {
+
+
+    const extOptionsToggleButton = document.createElement('div');
+    extOptionsToggleButton.id = "ext-options-toggle-button";
+    extOptionsToggleButton.style.background = "#32a852";
+    extOptionsToggleButton.style.cursor = "pointer";
+    extOptionsToggleButton.style.padding = "5px 15px";
+    extOptionsToggleButton.style.textShadow = "1px 1px 2px #000";
+    extOptionsToggleButton.style.borderRadius = "4px";
+    extOptionsToggleButton.style.margin = "0px 4px";
+    extOptionsToggleButton.style.boxShadow = '0 0 1px 1px #000';
+    extOptionsToggleButton.style.textAlign = "center";
+    extOptionsToggleButton.style.textDecoration = "underline";
+    extOptionsToggleButton.innerHTML = "Toggle Extension Menu";
+    extOptionsToggleButton.onmouseenter = function () {
+        this.style.background = "#2b9047";
+        this.style.transition = "0.2s";
+    }
+    extOptionsToggleButton.onmouseleave = function () {
+        this.style.background = "#32a852";
+        this.style.transition = "0.2s";
+    }
+    extOptionsToggleButton.onclick = function () {
+        let extOptionsMenu = document.getElementById("ext-options-menu");
+        if (extOptionsMenu.style.display == "none") {
+            extOptionsMenu.style.display = "block";
+        } else {
+            extOptionsMenu.style.display = "none";
+        }
+    }
+    socialContainer.appendChild(extOptionsToggleButton);
 }
+
