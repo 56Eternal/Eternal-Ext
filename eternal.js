@@ -29,37 +29,41 @@ css.appendChild(document.createTextNode(`
         padding: 5px;
         width: 100%;
     
-    }`
+    }
+    .mt10 {
+        margin-top: 10px;
+    }
+    `
 ));
 //setting variables
 var amountRulesAdded = 0;
 var theme = 0;
 
-if (localStorage.getItem("theme") != null) {
+if (localStorage.getItem("theme") !== null) {
     theme = parseInt(localStorage.getItem("theme"));
 }
 var adblocker = false;
-if (localStorage.getItem("adblocker") != null) {
+if (localStorage.getItem("adblocker") !== null) {
     adblocker = localStorage.getItem("adblocker") === "true";
 }
 var oldChatStyling = true;
-if (localStorage.getItem("oldChatStyling") != null) {
+if (localStorage.getItem("oldChatStyling") !== null) {
     oldChatStyling = localStorage.getItem("oldChatStyling") === "true";
 }
 var rainbowTime = false;
-if (localStorage.getItem("rainbowTime") != null) {
+if (localStorage.getItem("rainbowTime") !== null) {
     rainbowTime = localStorage.getItem("rainbowTime") === "true";
 }
 var messageTime = true;
-if (localStorage.getItem("messageTime") != null) {
+if (localStorage.getItem("messageTime") !== null) {
     messageTime = localStorage.getItem("messageTime") === "true";
 }
 var mothershipDigits = 1;
-if (localStorage.getItem("mothershipDigits") != null) {
+if (localStorage.getItem("mothershipDigits") !== null) {
     mothershipDigits = parseInt(localStorage.getItem("mothershipDigits"));
 }
 var rainbowText = false;
-if (localStorage.getItem("rainbowText") != null) {
+if (localStorage.getItem("rainbowText") !== null) {
     rainbowText = localStorage.getItem("rainbowText") === "true";
 }
 
@@ -524,6 +528,8 @@ function addOptionsMenu() {
     document.querySelector(".account-wrapper").style.gridRow = "2/3";
     document.querySelector(".account-wrapper").nextElementSibling.style.gridRow = "3/4";
     document.getElementById("main-container").style.gridTemplateColumns = "300px 330px 300px 250px";
+
+    //add options menu
     let optionsDiv = document.createElement("div");
     optionsDiv.id = "ext-options-menu";
     optionsDiv.classList = "fade-box tab-menu";
@@ -535,7 +541,7 @@ function addOptionsMenu() {
     optionsDiv.innerHTML = `
     <div class="tabs">
     <div class="tab active" id="ext-options-tab-general">General</div>
-    <div class="tab" id="ext-options-tab-skins">Skins</div>
+    <div class="tab" id="ext-options-tab-misc">Misc</div>
     </div>
 
     <div id="ext-options-general" style="padding: 16px;">
@@ -554,15 +560,25 @@ function addOptionsMenu() {
     <span id="mothershipDigitsDisplay">0
     <br>
     </div>
-    <div id="ext-options-skins" style="padding: 16px; display: none;">
-    <p style="margin: 10px 0px;"> Set skin list:</p>
-    <input class="vanis-menu-tf" id="enter-skin-list-tf"></input>
+    <div id="ext-options-misc" style="padding: 16px; display: none;">
+    <button class="vanis-menu-button mt10" id="copy-skin-list-button" tip="Click to copy your skin list to send it to someone else or save it somewhere secure.">Copy skin list to clipboard</button>
+    <input class="vanis-menu-tf mt10" id="set-skin-list-tf" placeholder="Set skin list..."></input>
+    <button class="vanis-menu-button mt10" id="set-skin-list-button" tip="Paste the skin list in the text field above and then click this button. Reload page to see the new skin list.">Set</button>
+    <br>
+    <button class="vanis-menu-button mt10" id="copy-settings-button" tip="Click to copy your vanis settings to send them to someone else or save them somewhere secure.">Copy settings to clipboard</button>
+    <input class="vanis-menu-tf mt10" id="set-settings-tf" placeholder="Set settings..."></input>
+    <button class="vanis-menu-button mt10" id="set-settings-button" tip="Paste the settings in the text field above and then click this button. Reload page to play with the new settings.">Set</button>
+    <br>
+    <button class="vanis-menu-button mt10" id="copy-hotkeys-button" tip="Click to copy your vanis hotkeys to send them to someone else or save them somewhere secure.">Copy hotkeys to clipboard</button>
+    <input class="vanis-menu-tf mt10" id="set-hotkeys-tf" placeholder="Set hotkeys..."></input>
+    <button class="vanis-menu-button mt10" id="set-hotkeys-button" tip="Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.">Set</button>
+    <br>
     </div>
        `;
     document.getElementById("main-container").append(optionsDiv);
 
     optionsDiv.children[0].children[0].onclick = function () { openExtOptionsTab("general") };
-    optionsDiv.children[0].children[1].onclick = function () { openExtOptionsTab("skins") };
+    optionsDiv.children[0].children[1].onclick = function () { openExtOptionsTab("misc") };
 
     //general
     document.getElementById("messageTimeCheckBox").checked = messageTime;
@@ -605,37 +621,68 @@ function addOptionsMenu() {
 
 
     //skins
-    let copySkinListButton = document.createElement("button");
-    copySkinListButton.classList = "vanis-menu-button";
-    copySkinListButton.innerHTML = "Copy skin list to clipboard";
-    copySkinListButton.setAttribute("tip", "Click to copy your skin list to send it to someone else or save it somewhere secure.");
+    let copySkinListButton = document.querySelector("#copy-skin-list-button");
     copySkinListButton.onclick = function () {
         navigator.clipboard.writeText(localStorage.getItem("skins")).then(() => {
-                copySkinListButton.innerHTML = "Copied!"
+                copySkinListButton.innerHTML = "Copied!";
             },
             () => {
-                copySkinListButton.innerHTML = "Failed copying skin list."
+                copySkinListButton.innerHTML = "Failed copying skin list.";
             });
-        
     }
-    document.getElementById("ext-options-skins").prepend(copySkinListButton);
 
-    let setSkinListButton = document.createElement("button");
-    setSkinListButton.style.margin = "10px 0px";
-    setSkinListButton.classList = "vanis-menu-button";
-    setSkinListButton.innerHTML = "Set";
-    setSkinListButton.setAttribute("tip", "Paste the skin list in the text field above and then click this button. Reload page to see the new skin list.")
-
+    let setSkinListButton = document.querySelector("#set-skin-list-button");
     setSkinListButton.onclick = function () {
         try {
-            localStorage.setItem("skins", document.getElementById("enter-skin-list-tf").value);
+            localStorage.setItem("skins", document.getElementById("set-skin-list-tf").value);
             setSkinListButton.innerHTML = "Skin list updated!";
         } catch (error) {
             setSkinListButton.value = "Error: not enough storage!";
         }
-        
     }
-    document.getElementById("ext-options-skins").append(setSkinListButton);
+
+
+    //settings
+    let copySettingsButton = document.querySelector("#copy-settings-button")
+    copySettingsButton.onclick = function () {
+        navigator.clipboard.writeText(localStorage.getItem("settings")).then(() => {
+                copySettingsButton.innerHTML = "Copied!"
+            },
+            () => {
+                copySettingsButton.innerHTML = "Failed copying settings."
+            });
+    }
+
+    let setSettingsButton = document.querySelector("#set-settings-button")
+    setSettingsButton.onclick = function () {
+        try {
+            localStorage.setItem("settings", document.getElementById("set-settings-tf").value);
+            setSettingsButton.innerHTML = "Settings updated!";
+        } catch (error) {
+            setSettingsButton.value = "Error: not enough storage!";
+        }
+    }
+
+    //hotkeys
+    let copyHotkeysButton = document.querySelector("#copy-hotkeys-button")
+    copyHotkeysButton.onclick = function () {
+        navigator.clipboard.writeText(localStorage.getItem("hotkeys")).then(() => {
+                copyHotkeysButton.innerHTML = "Copied!"
+            },
+            () => {
+                copyHotkeysButton.innerHTML = "Failed copying hotkeys."
+            });
+    }
+
+    let setHotkeysButton = document.querySelector("#set-hotkeys-button")
+    setHotkeysButton.onclick = function () {
+        try {
+            localStorage.setItem("hotkeys", document.getElementById("set-hotkeys-tf").value);
+            setHotkeysButton.innerHTML = "Hotkeys updated!";
+        } catch (error) {
+            setHotkeysButton.value = "Error: not enough storage!";
+        }
+    }
 
 }
 
@@ -662,8 +709,11 @@ function makeRainbowText() {
     ss.insertRule('.swal2-title {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100);
 }
 function addExtOptionsToggleButton() {
-
-
+    let extOptionsMenu = document.getElementById("ext-options-menu");
+    let extOptionsHidden = false;
+    if (localStorage.getItem("extOptionsHidden") !== null) {
+        extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true";
+    }
     const extOptionsToggleButton = document.createElement('div');
     extOptionsToggleButton.id = "ext-options-toggle-button";
     extOptionsToggleButton.style.background = "#32a852";
@@ -685,12 +735,18 @@ function addExtOptionsToggleButton() {
         this.style.transition = "0.2s";
     }
     extOptionsToggleButton.onclick = function () {
-        let extOptionsMenu = document.getElementById("ext-options-menu");
-        if (extOptionsMenu.style.display == "none") {
+        if (extOptionsHidden) {
             extOptionsMenu.style.display = "block";
+            extOptionsHidden = false;
+            localStorage.setItem("extOptionsHidden", extOptionsHidden);
         } else {
             extOptionsMenu.style.display = "none";
+            extOptionsHidden = true;
+            localStorage.setItem("extOptionsHidden", extOptionsHidden);
         }
+    }
+    if (extOptionsHidden) {
+        extOptionsMenu.style.display = "none";
     }
     socialContainer.appendChild(extOptionsToggleButton);
 }
