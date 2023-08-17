@@ -66,6 +66,10 @@ var rainbowText = false;
 if (localStorage.getItem("rainbowText") !== null) {
     rainbowText = localStorage.getItem("rainbowText") === "true";
 }
+var deleteRespawnAd = false;
+if (localStorage.getItem("deleteRespawnAd") !== null) {
+    deleteRespawnAd = localStorage.getItem("deleteRespawnAd") === "true";
+}
 
 updateTheme();
 addChangeThemeButton();
@@ -81,6 +85,9 @@ addTimeToMessages();
 addAnimations();
 if (rainbowText) {
     makeRainbowText();
+}
+if (deleteRespawnAd) {
+    deleteRespawnAdd();
 }
 addExtOptionsToggleButton();
 
@@ -555,6 +562,8 @@ function addOptionsMenu() {
     <input type="checkbox" id="oldChatStylingCheckBox"><br>
     <label for="rainbowTextCheckBox" tip="Changes the menu text color to be animated. Reload page to apply changes.">Rainbow Text:</label> 
     <input type="checkbox" id="rainbowTextCheckBox"><br>
+    <label for="deleteRespawnAdCheckBox" tip="Changes the menu text color to be animated. Reload page to apply changes.">Delete Respawn Ad:</label> 
+    <input type="checkbox" id="deleteRespawnAdCheckBox"><br>
     <label for="mothershipDigitsSlider" tip="Changes the amount of millisecond digits displayed on chat message time">Millisecond digits:</label> 
     <input type="range" min="0" max="3" value="0" id="mothershipDigitsSlider">
     <span id="mothershipDigitsDisplay">0
@@ -587,11 +596,7 @@ function addOptionsMenu() {
         localStorage.setItem("messageTime", messageTime);
 
     }
-    document.getElementById("rainbowTimeCheckBox").checked = rainbowTime;
-    document.getElementById("rainbowTimeCheckBox").onclick = function () {
-        rainbowTime = !rainbowTime;
-        localStorage.setItem("rainbowTime", rainbowTime);
-    }
+    
     document.getElementById("adblockerCheckBox").checked = adblocker;
     document.getElementById("adblockerCheckBox").onclick = function () {
         adblocker = !adblocker;
@@ -601,6 +606,16 @@ function addOptionsMenu() {
     document.getElementById("oldChatStylingCheckBox").onclick = function () {
         oldChatStyling = !oldChatStyling;
         localStorage.setItem("oldChatStyling", oldChatStyling);
+    }
+    document.getElementById("rainbowTimeCheckBox").checked = rainbowTime;
+    document.getElementById("rainbowTimeCheckBox").onclick = function () {
+        rainbowTime = !rainbowTime;
+        localStorage.setItem("rainbowTime", rainbowTime);
+    }
+    document.getElementById("deleteRespawnAdCheckBox").checked = deleteRespawnAd;
+    document.getElementById("deleteRespawnAdCheckBox").onclick = function () {
+        deleteRespawnAd = !deleteRespawnAd;
+        localStorage.setItem("deleteRespawnAd", deleteRespawnAd);
     }
 
     var msDigitsSlider = document.getElementById("mothershipDigitsSlider");
@@ -708,6 +723,11 @@ function makeRainbowText() {
     ss.insertRule('.replay-list-header {animation: colorRotate 6s linear 0s infinite !important;}', 100);
     ss.insertRule('.swal2-title {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100);
 }
+
+function deleteRespawnAdd() {
+    document.querySelector("#vanis-io_300x250_2").remove();
+}
+
 function addExtOptionsToggleButton() {
     let extOptionsMenu = document.getElementById("ext-options-menu");
     let extOptionsHidden = false;
