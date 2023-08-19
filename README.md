@@ -63,6 +63,7 @@ This extension currently makes 2 changes to the skins page:
 ## About the Extension
 I decided to publish my extension now because I felt like it. **Look through this code at your own risk.** I know it's bad, this is basically my first project and I am just having fun with it (You can see my first commit is from 1.5, simply because I didn't know anything about git other than that it exists before that). That being said, Any optimizations are very welcome, just dm me :)
 
+If you want to add part of my extension to your own extension, please credit me or I will cry for days on end
 
 ## For questions
 Discord: eternal8910
