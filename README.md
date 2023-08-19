@@ -7,15 +7,24 @@ Extension for vanis.io which adds selected custom themes, timestamps to messages
 Download this repository as `.zip`. Then, unzip it into a new folder where you want to "install" the extension to. Open that unzipped directory and delete the `scripts` folder and its contents, so you should only have 5 files and no folders in total. Now follow the steps based on the browser you play vanis with.
 
 ### Chrome:
-- open a new tab, type `chrome://extensions/` in the URL bar and turn on developer mode (top right)
+- open a new tab, type `chrome://extensions/` in the URL bar
+- turn on developer mode (top right)
 - click on "load unpacked extension" (top left)
 - select the folder that contains the unzipped extension
 
 ### Firefox:
-open a new tab, type `about:debugging` in the URL bar, click the "This Firefox" option, click the "Load Temporary Add-on" button, then select the `manifest.json` file in the folder containing the unzipped extension.
+- open a new tab, type `about:debugging` in the URL bar
+- click the "This Firefox" option
+- click the "Load Temporary Add-on" button
+- select the `manifest.json` file in the folder containing the unzipped extension
 
 Due to Firefox Security Settings, unofficial extensions like this one automatically get removed again when firefox is closed, so either you never close firefox or you add the extension back to Firefox every time you open it. Yes I know it sucks.
 
+### Microsoft Edge:
+- open a new tab, type `about:debugging` in the URL bar
+- turn on developer mode (on the left side)
+- click "load unpacked extension
+- select the folder that contains the unzipped extension
 
 ## How to update
 When a new version is available, you just press `ctrl+shift+r` on vanis.io to update.
