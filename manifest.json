@@ -1,8 +1,10 @@
 {
-    "manifest_version": 3,
+    "manifest_version": 2,
     "name": "Vanis.io Eternal Extension",
     "description": "Probably the worst Vanis.io extension. Add time sent to messages, revert chat styling back to how it was, button to cycle through multiple menu themes, button to make chat bigger, Buttons to get and set skin list. Dc: eternal_8910",
-    "version": "1.8.1",
+    "version": "2.0.0",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    
     "icons": {
         "16": "vanislogoblue.png",
         "48": "vanislogoblue.png",
@@ -13,14 +15,14 @@
             "matches": [
                 "https://vanis.io/*"
             ],
-            "js": ["eternal.js"],
+            "js": ["fetcher.js"],
             "run_at": "document_end"
         }
         ,{
             "matches": [
                 "https://skins.vanis.io/*"
             ],
-            "js": ["skins.js"],
+            "js": ["skins-fetcher.js"],
             "run_at": "document_end"
         }
     ]
