@@ -270,7 +270,6 @@ function updateTheme() {
 
         case 7:
             //misavers
-            console.log("tguherdfgzuihredft");
             ss.insertRule('::-webkit-scrollbar-thumb {background: url(' + misaversUrl + ') !important;}', 0);
             ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
             ss.insertRule('.fade-box {background: url(' + misaversUrl + ') !important;}', 2);
@@ -297,6 +296,7 @@ function updateTheme() {
             break;
 
         case 10:
+            //animation
             ss.insertRule('.fade-box {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
             amountRulesAdded = 1;
             break;
@@ -592,7 +592,7 @@ function addOptionsMenu() {
         localStorage.setItem("messageTime", messageTime);
 
     }
-    
+
     document.getElementById("adblockerCheckBox").checked = adblocker;
     document.getElementById("adblockerCheckBox").onclick = function () {
         adblocker = !adblocker;
@@ -635,8 +635,8 @@ function addOptionsMenu() {
     let copySkinListButton = document.querySelector("#copy-skin-list-button");
     copySkinListButton.onclick = function () {
         navigator.clipboard.writeText(localStorage.getItem("skins")).then(() => {
-                copySkinListButton.innerHTML = "Copied!";
-            },
+            copySkinListButton.innerHTML = "Copied!";
+        },
             () => {
                 copySkinListButton.innerHTML = "Failed copying skin list.";
             });
@@ -657,8 +657,8 @@ function addOptionsMenu() {
     let copySettingsButton = document.querySelector("#copy-settings-button")
     copySettingsButton.onclick = function () {
         navigator.clipboard.writeText(localStorage.getItem("settings")).then(() => {
-                copySettingsButton.innerHTML = "Copied!"
-            },
+            copySettingsButton.innerHTML = "Copied!"
+        },
             () => {
                 copySettingsButton.innerHTML = "Failed copying settings."
             });
@@ -678,8 +678,8 @@ function addOptionsMenu() {
     let copyHotkeysButton = document.querySelector("#copy-hotkeys-button")
     copyHotkeysButton.onclick = function () {
         navigator.clipboard.writeText(localStorage.getItem("hotkeys")).then(() => {
-                copyHotkeysButton.innerHTML = "Copied!"
-            },
+            copyHotkeysButton.innerHTML = "Copied!"
+        },
             () => {
                 copyHotkeysButton.innerHTML = "Failed copying hotkeys."
             });
@@ -715,9 +715,9 @@ function openExtOptionsTab(tabName) {
 
 
 function makeRainbowText() {
-    ss.insertRule('.fade-box {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100)
+    ss.insertRule('.fade-box {animation: colorRotate 6s linear 0s infinite !important;}', 100)
     ss.insertRule('.replay-list-header {animation: colorRotate 6s linear 0s infinite !important;}', 100);
-    ss.insertRule('.swal2-title {animation: colorRotate 6s linear 0s infinite !important;) !important;}', 100);
+    ss.insertRule('.swal2-title {animation: colorRotate 6s linear 0s infinite !important;}', 100);
 }
 
 function deleteStatScreenAdd() {
