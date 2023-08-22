@@ -1,6 +1,7 @@
 # Eternal Extension
 
 Extension for vanis.io which adds selected custom themes, timestamps to messages, backups for your game settings and skins and lots of other features.
+**No, this is not Rise, and no, this extension does not let you multibox in 1 tab.**
 
 
 ## How to install
@@ -26,19 +27,18 @@ Due to Firefox Security Settings, unofficial extensions like this one automatica
 - click "load unpacked extension
 - select the folder that contains the unzipped extension
 
+
 ## How to update
 When a new version is available, you just press `ctrl+shift+r` on vanis.io to update.
 
 The version displayed on the extensions menu cannot be updated dynamically, meaning it will always display the version from the time you installed the extension until you reinstall the extension, so don't be confused by that.
 
+
 ## How to use
-
 If you installed the extension properly and open vanis.io with the extension running, you should see 2 new buttons at the very bottom of the menu, to the right of the button leading you to skins.vanis.io. 
-
 
 ### Themes
 The first button is for changing your menu theme. Go ahead and look through all the currently existing themes to pick one. New themes may (and probably will) be added in the future. Bear in mind this extension was originally only for personal use, which is why there are some "trash themes" still left in.
-
 
 ### Extension Menu
 

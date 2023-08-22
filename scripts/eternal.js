@@ -435,7 +435,7 @@ function addTimeToMessages() {
                     break;
 
                 case 4:
-                    messageTimeElement.style.color = "green";
+                    messageTimeElement.style.color = "lime";
                     break;
 
                 case 5:
