@@ -458,7 +458,7 @@ function addTimeToMessages() {
         }
 
         else {
-            messageTimeElement.style.color = "rgb(130, 130, 130)";
+            messageTimeElement.style.color = "rgb(255, 255, 255)";
         }
         return messageTimeElement;
     }
