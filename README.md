@@ -31,7 +31,7 @@ Due to Firefox Security Settings, unofficial extensions like this one automatica
 - look up how to "load unpacked extension" or "load extension from folder" in your browser, or dm me for help :)
 
 ## How to update
-When a new version is available, you just press `ctrl+shift+r` on vanis.io to update.
+When a new version is available, it updates automatically when you reload vanis.io. If that doesn't work, try pressing `ctrl+shift+r`.
 
 The version displayed on the extensions menu cannot be updated dynamically, meaning it will always display the version from the time you installed the extension until you reinstall the extension, so don't be confused by that.
 
