@@ -134,7 +134,7 @@ function lowerPlayerData() {
 function addChangeThemeButton() {
 
     //Change Theme parent button
-    var amountThemes = 14;
+    var amountThemes = 15;
     const themeButton = document.createElement('div');
     themeButton.id = "theme-button";
     themeButton.style.display = "flex";
@@ -211,142 +211,153 @@ function updateTheme() {
         case 1:
             //purple
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2757 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(31, 0, 33, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(31, 0, 33, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 2:
             //wine red
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2730 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 0, 10, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 0, 10, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 3:
             //petrol
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #275e42 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 11, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 11, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 4:
             //cyan
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #52afb7 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 31, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 31, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 5:
             //brown -202°
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e3627 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 4, 0, .75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 4, 0, .75) 300px,rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 6:
             //cactus 194°
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e5727 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 24, 0, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 24, 0, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 7:
             //misavers
             ss.insertRule('::-webkit-scrollbar-thumb {background: url(' + misaversUrl + ') !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: url(' + misaversUrl + ') !important;}', 2);
-            ss.insertRule('.replay-list-header {background: url(' + misaversUrl + ') !important;}', 3);
-            ss.insertRule('.swal2-popup {background: url(' + misaversUrl + ') !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: url(' + misaversUrl + ') !important;}', 0);
+            ss.insertRule('.replay-list-header {background: url(' + misaversUrl + ') !important;}', 0);
+            ss.insertRule('.swal2-popup {background: url(' + misaversUrl + ') !important;}', 0);
+            ss.insertRule('.tooltip {background: url(' + misaversUrl + ') !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 8:
             //quotes
             ss.insertRule('::-webkit-scrollbar-thumb {background: url(' + misaversUrl + ') !important;}', 0);
-            ss.insertRule('.fade-box {background: url(' + misaversUrl + ') !important;}', 1);
-            ss.insertRule('.swal2-popup {background: url(' + misaversUrl + ') !important;}', 2);
-            ss.insertRule('.replay-list-header {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074337213061541970/image.png) !important;}', 3);
-            ss.insertRule('.replay-list {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074340235518947408/replay-list.png) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('.fade-box {background: url(' + misaversUrl + ') !important;}', 0);
+            ss.insertRule('.swal2-popup {background: url(' + misaversUrl + ') !important;}', 0);
+            ss.insertRule('.replay-list-header {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074337213061541970/image.png) !important;}', 0);
+            ss.insertRule('.replay-list {background: url(https://cdn.discordapp.com/attachments/1041104770758344814/1074340235518947408/replay-list.png) !important;}', 0);
+            ss.insertRule('.tooltip {background: url(' + misaversUrl + ') !important;}', 0);
+            amountRulesAdded = 6;
             break;
         case 9:
             //transparent
             ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 0);
-            ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 1);
-            ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 2);
-            amountRulesAdded = 3;
+            ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 0);
+            ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 0);
+            ss.insertRule('.tooltip {background: rgba(0,0,0,0)!important;}', 0);
+            amountRulesAdded = 4;
             break;
 
         case 10:
             //animation
             ss.insertRule('.fade-box {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
-            amountRulesAdded = 1;
+            ss.insertRule('.tooltip {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
+            amountRulesAdded = 2;
             break;
 
         case 11:
             //blue black
             //for overlay: top left gradient color darkened 90%
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #009eff !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 16, 25, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 16, 25, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 12:
             //red black
             //for overlay: top left gradient color darkened 90%
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #ff0000 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(25, 0, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(25, 0, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
         case 13:
-            //orange black 2
-            //for overlay: top left gradient color darkened 90%
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #ff4c00 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(25, 8, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 4);
-            amountRulesAdded = 5;
-            break;
-
-
-        //unused 1
-        case 443534:
             //red black 2
             //for overlay: top left gradient color darkened 80%
             ss.insertRule('::-webkit-scrollbar-thumb {background-color: #960000 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(30, 0, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 1);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 2);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 3);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 4);
-            amountRulesAdded = 5;
+            ss.insertRule('#overlay {background: radial-gradient(rgba(30, 0, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 0);
+            amountRulesAdded = 6;
             break;
 
+        case 14:
+            //orange black 2
+            //for overlay: top left gradient color darkened 90%
+            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #ff4c00 !important;}', 0);
+            ss.insertRule('#overlay {background: radial-gradient(rgba(25, 8, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 0);
+            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 0);
+            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 0);
+            amountRulesAdded = 6;
+            break;
 
         default:
             console.log("UHFEHUIFKRRZBIGHK");
