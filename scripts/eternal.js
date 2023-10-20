@@ -1,4 +1,6 @@
 //global stuff
+const screenwidth = screen.width;
+const version = "2.0.4";
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
@@ -36,39 +38,43 @@ css.appendChild(document.createTextNode(`
     `
 ));
 //setting variables
-var amountRulesAdded = 0;
+let amountRulesAdded = 0;
 
-var theme = 0;
+let theme = 0;
 if (localStorage.getItem("theme") !== null) {
     theme = parseInt(localStorage.getItem("theme"));
 }
-var adblocker = false;
+let adblocker = false;
 if (localStorage.getItem("adblocker") !== null) {
     adblocker = localStorage.getItem("adblocker") === "true";
 }
-var oldChatStyling = true;
+let oldChatStyling = true;
 if (localStorage.getItem("oldChatStyling") !== null) {
     oldChatStyling = localStorage.getItem("oldChatStyling") === "true";
 }
-var rainbowTime = false;
+let rainbowTime = false;
 if (localStorage.getItem("rainbowTime") !== null) {
     rainbowTime = localStorage.getItem("rainbowTime") === "true";
 }
-var messageTime = true;
+let messageTime = true;
 if (localStorage.getItem("messageTime") !== null) {
     messageTime = localStorage.getItem("messageTime") === "true";
 }
-var msDigits = 1;
+let msDigits = 1;
 if (localStorage.getItem("msDigits") !== null) {
     msDigits = parseInt(localStorage.getItem("msDigits"));
 }
-var rainbowText = false;
+let rainbowText = false;
 if (localStorage.getItem("rainbowText") !== null) {
     rainbowText = localStorage.getItem("rainbowText") === "true";
 }
-var deleteStatScreenAd = false;
+let deleteStatScreenAd = false;
 if (localStorage.getItem("deleteStatScreenAd") !== null) {
     deleteStatScreenAd = localStorage.getItem("deleteStatScreenAd") === "true";
+}
+let extOptionsHidden = false;
+if (localStorage.getItem("extOptionsHidden") !== null) {
+    extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true";
 }
 
 updateTheme();
@@ -134,7 +140,7 @@ function lowerPlayerData() {
 function addChangeThemeButton() {
 
     //Change Theme parent button
-    var amountThemes = 15;
+    let amountThemes = 15;
     const themeButton = document.createElement('div');
     themeButton.id = "theme-button";
     themeButton.style.display = "flex";
@@ -366,14 +372,11 @@ function updateTheme() {
 }
 
 function addBigChatButton() {
-    var chatbox = document.querySelector(".chatbox");
-    var bigChat = false;
-    var originalHeight;
-    const bigChatButton = document.createElement('button');
-    bigChatButton.id = "big-chat";
-    bigChatButton.classList = "vanis-menu-button mt10";
+    let chatbox = document.querySelector(".chatbox");
+    let bigChat = false;
+    let originalHeight;
 
-
+    const bigChatButton = document.querySelector("#big-chat");
     bigChatButton.innerHTML = "Big Chat";
     bigChatButton.onclick = function () {
         makeChatBig();
@@ -390,19 +393,17 @@ function addBigChatButton() {
             bigChat = true;
         }
     }
-
-    document.getElementById("ext-options-general").appendChild(bigChatButton);
 }
 
 //messages show time posted
 function addTimeToMessages() {
-    var colorCode = 1;
+    let colorCode = 1;
     function createTimeStamp() {
         const now = new Date();
-        var seconds = now.getSeconds();
-        var minutes = now.getMinutes();
-        var hours = now.getHours();
-        var ms = now.getMilliseconds();
+        let seconds = now.getSeconds();
+        let minutes = now.getMinutes();
+        let hours = now.getHours();
+        let ms = now.getMilliseconds();
 
         ms = ms.toString();
         if (ms.length == 1) {
@@ -424,7 +425,7 @@ function addTimeToMessages() {
         if (ms.length != 0) {
             ms = "." + ms;
         }
-        var time = "[" + hours + ":" + minutes + ":" + seconds + ms + "]";
+        let time = "[" + hours + ":" + minutes + ":" + seconds + ms + "]";
         const messageTimeElement = document.createElement('span');
         messageTimeElement.classList = "chat-message-time";
         messageTimeElement.style.fontSize = "12px";
@@ -474,19 +475,16 @@ function addTimeToMessages() {
         return messageTimeElement;
     }
 
-    var firstTime = true;
-    var oldChildElementCount;
+    let firstTime = true;
+    let oldChildElementCount;
     const config = { attributes: false, childList: true, subtree: false };
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
             if (messageTime) {
                 oldChildElementCount = messageList.childElementCount;
-                var messageTimeElement = createTimeStamp();
+                let messageTimeElement = createTimeStamp();
                 const newMessage = messageList.lastChild;
-                try {
-                    newMessage.prepend(messageTimeElement);
-                } catch (thisRatio) {
-                };
+                newMessage?.prepend(messageTimeElement);
                 if (firstTime) {
                     fixTimestampsAfterFullChat();
                     firstTime = !firstTime;
@@ -513,21 +511,12 @@ function addTimeToMessages() {
             messageList.childNodes[i].firstChild.innerHTML = messageList.childNodes[i + 1].firstChild.innerHTML;
             messageList.childNodes[i].firstChild.style.color = messageList.childNodes[i + 1].firstChild.style.color;
         }
-        var messageTimeElement = createTimeStamp();
+        let messageTimeElement = createTimeStamp();
         const newMessage = messageList.lastChild;
-        try {
-            newMessage.prepend(messageTimeElement);
-            newMessage.childNodes[1].remove();
-        } catch (thisRatio) {
-            console.log(thisRatio);
-        };
-
+        newMessage.prepend(messageTimeElement);
+        newMessage.childNodes[1].remove();
     }
-
-
 }
-
-
 
 function makeOldChatStyling() {
     //set to 100 so it doesn't interfere with the rules for theme
@@ -540,8 +529,14 @@ function addOptionsMenu() {
     //reorganize main menu
     document.querySelector(".account-wrapper").style.gridRow = "2/3";
     document.querySelector(".account-wrapper").nextElementSibling.style.gridRow = "3/4";
-    document.getElementById("main-container").style.gridTemplateColumns = "300px 330px 300px 250px";
+    if (screenwidth <= 1500) {
+        if (extOptionsHidden == false) {
+            document.querySelector(".account-wrapper").style.display = "none";
+            document.querySelector("#main-container > div:nth-child(5)").style.display = "none";
+        }
 
+    }
+    document.getElementById("main-container").style.gridTemplateColumns = "300px 330px 300px 250px";
     //add options menu
     let optionsDiv = document.createElement("div");
     optionsDiv.id = "ext-options-menu";
@@ -574,7 +569,8 @@ function addOptionsMenu() {
     <input type="checkbox" id="rainbowTextCheckBox"><br>
     <label for="deleteStatScreenAdCheckBox" tip="Deletes the ad on the stat screen, so your mouse movement is still accurate when you play with the stat screen still open(I heard some people actually do that)">Delete Respawn Ad:</label> 
     <input type="checkbox" id="deleteStatScreenAdCheckBox"><br>
-    
+    <button id="big-chat" class="vanis-menu-button mt10"></button><br>
+    <p style="position: absolute; bottom: 10px;"> Eternal Extension v${version}</p>
     </div>
     <div id="ext-options-misc" style="padding: 16px; display: none;">
     <button class="vanis-menu-button mt10" id="copy-skin-list-button" tip="Click to copy your skin list to send it to someone else or save it somewhere secure.">Copy skin list to clipboard</button>
@@ -589,6 +585,7 @@ function addOptionsMenu() {
     <input class="vanis-menu-tf mt10" id="set-hotkeys-tf" placeholder="Set hotkeys..."></input>
     <button class="vanis-menu-button mt10" id="set-hotkeys-button" tip="Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.">Set</button>
     <br>
+    
     </div>
        `;
     document.getElementById("main-container").append(optionsDiv);
@@ -625,7 +622,7 @@ function addOptionsMenu() {
         localStorage.setItem("deleteStatScreenAd", deleteStatScreenAd);
     }
 
-    var msDigitsSlider = document.getElementById("msDigitsSlider");
+    let msDigitsSlider = document.getElementById("msDigitsSlider");
 
     msDigitsSlider.value = msDigits;
     document.getElementById("msDigitsDisplay").innerHTML = msDigits;
@@ -705,7 +702,6 @@ function addOptionsMenu() {
             setHotkeysButton.value = "Error: not enough storage!";
         }
     }
-
 }
 
 function openExtOptionsTab(tabName) {
@@ -717,13 +713,9 @@ function openExtOptionsTab(tabName) {
         document.getElementById("ext-options-tab-" + tabName).classList = "tab active";
         optionsDiv.children[i + 1].style.display = "none";
         document.getElementById("ext-options-" + tabName).style.display = "block";
-
     }
-
     console.log(tabName);
-
 }
-
 
 function makeRainbowText() {
     ss.insertRule('.fade-box {animation: colorRotate 6s linear 0s infinite !important;}', 100)
@@ -737,10 +729,6 @@ function deleteStatScreenAdd() {
 
 function addExtOptionsToggleButton() {
     let extOptionsMenu = document.getElementById("ext-options-menu");
-    let extOptionsHidden = false;
-    if (localStorage.getItem("extOptionsHidden") !== null) {
-        extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true";
-    }
     const extOptionsToggleButton = document.createElement('div');
     extOptionsToggleButton.id = "ext-options-toggle-button";
     extOptionsToggleButton.style.background = "#32a852";
@@ -763,10 +751,18 @@ function addExtOptionsToggleButton() {
     }
     extOptionsToggleButton.onclick = function () {
         if (extOptionsHidden) {
+            if (screenwidth <= 1500) {
+                document.querySelector(".account-wrapper").style.display = "none";
+                document.querySelector("#main-container > div:nth-child(5)").style.display = "none";
+            }
             extOptionsMenu.style.display = "block";
             extOptionsHidden = false;
             localStorage.setItem("extOptionsHidden", extOptionsHidden);
         } else {
+            if (screenwidth <= 1500) {
+                document.querySelector(".account-wrapper").style.display = "block";
+                document.querySelector("#main-container > div:nth-child(5)").style.display = "flex";
+            }
             extOptionsMenu.style.display = "none";
             extOptionsHidden = true;
             localStorage.setItem("extOptionsHidden", extOptionsHidden);
