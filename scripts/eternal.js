@@ -1,6 +1,7 @@
 //global stuff
 const screenwidth = screen.width;
-const version = "2.1.0";
+const version = "2.1.1";
+const latestFeatures = 'Latest features: 1. Added button on skins.vanis.io to copy all loaded skins to clipboard. 2. Under the "Misc" tab, added an "Add" button to add the new skin list in the text field to your current skin list. 3. Added this update note :)';
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
@@ -576,7 +577,7 @@ function addOptionsMenu() {
     <label for="deleteStatScreenAdCheckBox" tip="Deletes the ad on the stat screen, so your mouse movement is still accurate when you play with the stat screen still open(I heard some people actually do that)">Delete Respawn Ad:</label> 
     <input type="checkbox" id="deleteStatScreenAdCheckBox"><br>
     <button id="big-chat" class="vanis-menu-button mt10"></button><br>
-    <p style="position: absolute; bottom: 10px;"> Eternal Extension v${version}</p>
+    <p style="position: absolute; bottom: 10px;" tip='${latestFeatures}'> Eternal Extension v${version}</p>
     </div>
     <div id="ext-options-misc" style="padding: 16px; display: none;">
     <button class="vanis-menu-button mt10" id="copy-skin-list-button" tip="Click to copy your skin list to send it to someone else or save it somewhere secure.">Copy skin list to clipboard</button>
