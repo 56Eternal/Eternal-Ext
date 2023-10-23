@@ -686,11 +686,11 @@ function addOptionsMenu() {
     let copyHotkeysButton = document.querySelector("#copy-hotkeys-button")
     copyHotkeysButton.onclick = function () {
         navigator.clipboard.writeText(localStorage.getItem("hotkeys")).then(() => {
-            copyHotkeysButton.innerHTML = "Copied!"
-        },
-            () => {
-                copyHotkeysButton.innerHTML = "Failed copying hotkeys."
-            });
+                copyHotkeysButton.innerHTML = "Copied!"
+            },
+                () => {
+                    copyHotkeysButton.innerHTML = "Failed copying hotkeys."
+                });
     }
 
     let setHotkeysButton = document.querySelector("#set-hotkeys-button")
