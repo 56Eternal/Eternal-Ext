@@ -60,15 +60,15 @@ As an example let's say you want to send your skin list to your friend.
 1. you and your friends need to install this extension.
 2. you copy your skin list to clipboard.
 3. you go to discord, tpye a backtick `` ` ``, paste from clipboard, and type another backtick`` ` ``.
-4. your friend copies the message, pastes it in the text field which says "set skin list", clicks the button below, and then refreshes the page. Now he should have your skin list.
+4. your friend copies the message, pastes it in the text field which says "set skin list", clicks the "Set" button below, and then refreshes the page. Now he should have your skin list. Instead of setting it as the new skin list, he can also add all the skins to his own skin list, by pressing the "Add" button.
 
 You can also use this feature to easily set up your skin list, settings and hotkeys on a new device.
 
 
 ### skins.vanis.io
 This extension currently makes 2 changes to the skins page:
-1. Skins have an animated rainbow background, this way you can easily identify a transparent skin.
-2. Next to where it says "Your Skins", it will say how many skins you have uploaded so far.
+1. Next to where it says "Your Skins", it will say how many skins you have uploaded so far.
+2. Below the logout in the left menu, a button is added to copy all currently displayed skins to clipboard. You can then just paste it in the corresponding text field in my extension menu in vanis.io, and either set it as the new skin list, or add all the skins to your current skin list.
 
 
 ## About the Extension

@@ -1,6 +1,6 @@
 //global stuff
 const screenwidth = screen.width;
-const version = "2.0.4";
+const version = "2.1.0";
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
@@ -366,7 +366,7 @@ function updateTheme() {
             break;
 
         default:
-            console.log("UHFEHUIFKRRZBIGHK");
+            console.log("You shouldn't see this");
     }
     localStorage.setItem("theme", theme);
 }
@@ -430,7 +430,7 @@ function addTimeToMessages() {
         messageTimeElement.classList = "chat-message-time";
         messageTimeElement.style.fontSize = "12px";
         messageTimeElement.style.marginRight = "5px";
-        messageTimeElement.style.marginBottom = "1px";
+        messageTimeElement.style.marginBottom = "auto";
         messageTimeElement.innerHTML = time;
         if (rainbowTime) {
             switch (colorCode) {
@@ -515,8 +515,14 @@ function addTimeToMessages() {
         const newMessage = messageList.lastChild;
         newMessage.prepend(messageTimeElement);
         newMessage.childNodes[1].remove();
+
+
     }
+
+
 }
+
+
 
 function makeOldChatStyling() {
     //set to 100 so it doesn't interfere with the rules for theme
@@ -575,7 +581,8 @@ function addOptionsMenu() {
     <div id="ext-options-misc" style="padding: 16px; display: none;">
     <button class="vanis-menu-button mt10" id="copy-skin-list-button" tip="Click to copy your skin list to send it to someone else or save it somewhere secure.">Copy skin list to clipboard</button>
     <input class="vanis-menu-tf mt10" id="set-skin-list-tf" placeholder="Set skin list..."></input>
-    <button class="vanis-menu-button mt10" id="set-skin-list-button" tip="Paste the skin list in the text field above and then click this button. Reload page to see the new skin list.">Set</button>
+    <button class="vanis-menu-button mt10" id="set-skin-list-button" tip="Paste the skin list in the text field above and then click this button to overwrite your current skin list with the new one. Reload page to see the new skin list.">Set</button>
+    <button style="margin-left: 5px;" class="vanis-menu-button mt10" id="add-to-skin-list-button" tip="Click this button to add the list of skins above to your current skin list. Reload page to see the new skin list.">Add</button>
     <br>
     <button class="vanis-menu-button mt10" id="copy-settings-button" tip="Click to copy your vanis settings to send them to someone else or save them somewhere secure.">Copy settings to clipboard</button>
     <input class="vanis-menu-tf mt10" id="set-settings-tf" placeholder="Set settings..."></input>
@@ -655,8 +662,25 @@ function addOptionsMenu() {
         try {
             localStorage.setItem("skins", document.getElementById("set-skin-list-tf").value);
             setSkinListButton.innerHTML = "Skin list updated!";
+            setSkinListButton.setAttribute("tip", "Paste the skin list in the text field above and then click this button to overwrite your current skin list with the new one. Reload page to see the new skin list.")
+            document.getElementById("set-skin-list-tf").value = "";
         } catch (error) {
-            setSkinListButton.value = "Error: not enough storage!";
+            setSkinListButton.innerHTML = "Error";
+            setSkinListButton.setAttribute("tip", "ERROR: This could mean that the input in the text field above was invalid, or that you do not have enough storage.")
+        }
+    }
+
+    let addToSkinListButton = document.querySelector("#add-to-skin-list-button");
+    addToSkinListButton.onclick = function () {
+        try {
+            let oldSkins = Array.from(JSON.parse(localStorage.getItem("skins")));
+            let newSkins = Array.from(JSON.parse(document.getElementById("set-skin-list-tf").value));
+            localStorage.setItem("skins", JSON.stringify(oldSkins.concat(...newSkins)));
+            addToSkinListButton.innerHTML = `${newSkins.length} skins added!`;
+            document.getElementById("set-skin-list-tf").value = "";
+        } catch (error) {
+            addToSkinListButton.innerHTML = "Error";
+            addToSkinListButton.setAttribute("tip", "ERROR: This could mean that the input in the text field above was invalid, or that you do not have enough storage.")
         }
     }
 
@@ -677,20 +701,24 @@ function addOptionsMenu() {
         try {
             localStorage.setItem("settings", document.getElementById("set-settings-tf").value);
             setSettingsButton.innerHTML = "Settings updated!";
+            setSettingsButton.setAttribute("tip", "Paste the settings in the text field above and then click this button. Reload page to play with the new settings.")
+            document.getElementById("set-settings-tf").value = "";
         } catch (error) {
-            setSettingsButton.value = "Error: not enough storage!";
+            setSettingsButton.value = "Error";
+            setSettingsButton.setAttribute("tip", "ERROR: This could mean that the input in the text field above was invalid, or that you do not have enough storage.")
         }
     }
+
 
     //misc tab: hotkeys
     let copyHotkeysButton = document.querySelector("#copy-hotkeys-button")
     copyHotkeysButton.onclick = function () {
         navigator.clipboard.writeText(localStorage.getItem("hotkeys")).then(() => {
-                copyHotkeysButton.innerHTML = "Copied!"
-            },
-                () => {
-                    copyHotkeysButton.innerHTML = "Failed copying hotkeys."
-                });
+            copyHotkeysButton.innerHTML = "Copied!"
+        },
+            () => {
+                copyHotkeysButton.innerHTML = "Failed copying hotkeys."
+            });
     }
 
     let setHotkeysButton = document.querySelector("#set-hotkeys-button")
@@ -698,8 +726,11 @@ function addOptionsMenu() {
         try {
             localStorage.setItem("hotkeys", document.getElementById("set-hotkeys-tf").value);
             setHotkeysButton.innerHTML = "Hotkeys updated!";
+            setSettingsButton.setAttribute("tip", "Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.")
+            document.getElementById("set-hotkeys-tf").value = "";
         } catch (error) {
-            setHotkeysButton.value = "Error: not enough storage!";
+            setHotkeysButton.value = "Error";
+            setHotkeysButton.setAttribute("tip", "ERROR: This could mean that the input in the text field above was invalid, or that you do not have enough storage.")
         }
     }
 }
@@ -714,7 +745,6 @@ function openExtOptionsTab(tabName) {
         optionsDiv.children[i + 1].style.display = "none";
         document.getElementById("ext-options-" + tabName).style.display = "block";
     }
-    console.log(tabName);
 }
 
 function makeRainbowText() {
