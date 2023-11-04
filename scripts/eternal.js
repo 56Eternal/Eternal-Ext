@@ -1,11 +1,12 @@
 //global stuff
 const screenwidth = screen.width;
-const version = "2.1.1";
-const latestFeatures = 'Latest features: 1. Added button on skins.vanis.io to copy all loaded skins to clipboard. 2. Under the "Misc" tab, added an "Add" button to add the new skin list in the text field to your current skin list. 3. Added this update note :)';
+const version = "2.1.2";
+const latestFeatures = 'Latest features: Added button to reset the chat message time color so you can make the same messages have the same color on both tabs (yes, someone requested this)';
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
 const messageList = document.querySelector(".message-list");
+let colorCode = 1;
 let css = document.createElement("style");
 document.head.appendChild(css);
 css.appendChild(document.createTextNode(`
@@ -88,6 +89,7 @@ if (oldChatStyling) {
 }
 addOptionsMenu();
 addBigChatButton();
+addResetMessageTimeColorButton()
 addTimeToMessages();
 addAnimations();
 if (rainbowText) {
@@ -378,11 +380,9 @@ function addBigChatButton() {
     let originalHeight;
 
     const bigChatButton = document.querySelector("#big-chat");
-    bigChatButton.innerHTML = "Big Chat";
     bigChatButton.onclick = function () {
         makeChatBig();
     }
-
     function makeChatBig() {
         if (bigChat) {
             chatbox.style.height = originalHeight;
@@ -395,10 +395,13 @@ function addBigChatButton() {
         }
     }
 }
-
+function addResetMessageTimeColorButton() {
+    document.querySelector("#reset-message-time-color").onclick = function () {
+        colorCode = 1;
+    }
+}
 //messages show time posted
 function addTimeToMessages() {
-    let colorCode = 1;
     function createTimeStamp() {
         const now = new Date();
         let seconds = now.getSeconds();
@@ -576,7 +579,8 @@ function addOptionsMenu() {
     <input type="checkbox" id="rainbowTextCheckBox"><br>
     <label for="deleteStatScreenAdCheckBox" tip="Deletes the ad on the stat screen, so your mouse movement is still accurate when you play with the stat screen still open(I heard some people actually do that)">Delete Respawn Ad:</label> 
     <input type="checkbox" id="deleteStatScreenAdCheckBox"><br>
-    <button id="big-chat" class="vanis-menu-button mt10"></button><br>
+    <button id="big-chat" class="vanis-menu-button mt10">Big Chat</button><br>
+    <button id="reset-message-time-color" class="vanis-menu-button mt10">Reset Message Time Color</button><br>
     <p style="position: absolute; bottom: 10px;" tip='${latestFeatures}'> Eternal Extension v${version}</p>
     </div>
     <div id="ext-options-misc" style="padding: 16px; display: none;">
