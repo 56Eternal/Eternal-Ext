@@ -1,7 +1,7 @@
 //global stuff
 const screenwidth = screen.width;
-const version = "2.1.2";
-const latestFeatures = 'Latest features: Added button to reset the chat message time color so you can make the same messages have the same color on both tabs (yes, someone requested this)';
+const version = "2.1.3";
+const latestFeatures = 'Latest features: Made it harder to accidentally delete your skin list, settings and hotkeys';
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
@@ -664,28 +664,48 @@ function addOptionsMenu() {
 
     let setSkinListButton = document.querySelector("#set-skin-list-button");
     setSkinListButton.onclick = function () {
-        try {
-            localStorage.setItem("skins", document.getElementById("set-skin-list-tf").value);
-            setSkinListButton.innerHTML = "Skin list updated!";
+        let value = document.getElementById("set-skin-list-tf").value.trim();
+        if (isValidArray(value)) {
+            localStorage.setItem("skins", value);
+            success("updated")
+        }
+        else {
+            if (value === "clear") {
+                localStorage.removeItem("skins");
+                success("cleared")
+            }
+            else {
+                setSkinListButton.innerHTML = "Error";
+                setSkinListButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.");
+            }
+        }
+        function success(action) {
+            setSkinListButton.innerHTML = `Skin list ${action}!`;
             setSkinListButton.setAttribute("tip", "Paste the skin list in the text field above and then click this button to overwrite your current skin list with the new one. Reload page to see the new skin list.")
             document.getElementById("set-skin-list-tf").value = "";
-        } catch (error) {
-            setSkinListButton.innerHTML = "Error";
-            setSkinListButton.setAttribute("tip", "ERROR: This could mean that the input in the text field above was invalid, or that you do not have enough storage.")
         }
     }
 
     let addToSkinListButton = document.querySelector("#add-to-skin-list-button");
     addToSkinListButton.onclick = function () {
-        try {
-            let oldSkins = Array.from(JSON.parse(localStorage.getItem("skins")));
-            let newSkins = Array.from(JSON.parse(document.getElementById("set-skin-list-tf").value));
-            localStorage.setItem("skins", JSON.stringify(oldSkins.concat(...newSkins)));
+        let value = document.getElementById("set-skin-list-tf").value.trim();
+        debugger
+        if (isValidArray(value)) {
+            let newSkins = Array.from(JSON.parse(value));
+            try {
+                let oldSkins = Array.from(JSON.parse(localStorage.getItem("skins")));
+                localStorage.setItem("skins", JSON.stringify(oldSkins.concat(...newSkins)));
+            }
+            catch(e) {
+                localStorage.setItem("skins", value);
+            }            
             addToSkinListButton.innerHTML = `${newSkins.length} skins added!`;
             document.getElementById("set-skin-list-tf").value = "";
-        } catch (error) {
+            success("updated")
+        }
+        else {
             addToSkinListButton.innerHTML = "Error";
-            addToSkinListButton.setAttribute("tip", "ERROR: This could mean that the input in the text field above was invalid, or that you do not have enough storage.")
+            addToSkinListButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.");
         }
     }
 
@@ -703,14 +723,16 @@ function addOptionsMenu() {
 
     let setSettingsButton = document.querySelector("#set-settings-button")
     setSettingsButton.onclick = function () {
-        try {
-            localStorage.setItem("settings", document.getElementById("set-settings-tf").value);
+        const value = document.getElementById("set-settings-tf").value.trim();
+        if(isValidJSON(value)) {
+            localStorage.setItem("settings", value);
             setSettingsButton.innerHTML = "Settings updated!";
             setSettingsButton.setAttribute("tip", "Paste the settings in the text field above and then click this button. Reload page to play with the new settings.")
             document.getElementById("set-settings-tf").value = "";
-        } catch (error) {
-            setSettingsButton.value = "Error";
-            setSettingsButton.setAttribute("tip", "ERROR: This could mean that the input in the text field above was invalid, or that you do not have enough storage.")
+        } 
+        else {
+            setSettingsButton.innerHTML = "Error";
+            setSettingsButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.")
         }
     }
 
@@ -728,14 +750,16 @@ function addOptionsMenu() {
 
     let setHotkeysButton = document.querySelector("#set-hotkeys-button")
     setHotkeysButton.onclick = function () {
-        try {
-            localStorage.setItem("hotkeys", document.getElementById("set-hotkeys-tf").value);
+        const value = document.getElementById("set-hotkeys-tf").value.trim();
+        if(isValidJSON(value)) {
+            localStorage.setItem("hotkeys", value);
             setHotkeysButton.innerHTML = "Hotkeys updated!";
             setSettingsButton.setAttribute("tip", "Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.")
             document.getElementById("set-hotkeys-tf").value = "";
-        } catch (error) {
-            setHotkeysButton.value = "Error";
-            setHotkeysButton.setAttribute("tip", "ERROR: This could mean that the input in the text field above was invalid, or that you do not have enough storage.")
+        } 
+        else {
+            setHotkeysButton.innerHTML = "Error";
+            setHotkeysButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.")
         }
     }
 }
@@ -807,4 +831,21 @@ function addExtOptionsToggleButton() {
         extOptionsMenu.style.display = "none";
     }
     socialContainer.appendChild(extOptionsToggleButton);
+}
+function isValidJSON(string) {
+    try {
+        JSON.parse(string);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+}
+function isValidArray(string) {
+    try {
+        const json = JSON.parse(string);
+        return Array.isArray(json);
+    } catch (e) {
+        return false;
+    }
 }
