@@ -437,40 +437,10 @@ function addTimeToMessages() {
         messageTimeElement.style.marginBottom = "auto";
         messageTimeElement.innerHTML = time;
         if (rainbowTime) {
-            switch (colorCode) {
-                case 1:
-                    messageTimeElement.style.color = "red";
-                    break;
-
-                case 2:
-                    messageTimeElement.style.color = "darkorange";
-                    break;
-
-                case 3:
-                    messageTimeElement.style.color = "yellow";
-                    break;
-
-                case 4:
-                    messageTimeElement.style.color = "lime";
-                    break;
-
-                case 5:
-                    messageTimeElement.style.color = "cyan";
-                    break;
-
-                case 6:
-                    messageTimeElement.style.color = "dodgerblue";
-                    break;
-
-                case 7:
-                    messageTimeElement.style.color = "blueviolet";
-                    break;
-
-                case 0:
-                    messageTimeElement.style.color = "magenta";
-                    break;
-            }
-            colorCode = (colorCode + 1) % 8;
+            const colors = ["magenta", "red", "darkorange", "yellow", "lime", "cyan", "dodgerblue", "blueviolet"];
+            const fb = "magenta";
+            messageTimeElement.style.color = colors[colorCode] || fb;
+            colorCode = (colorCode + 1) % colors.length;
         }
 
         else {
