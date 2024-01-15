@@ -54,7 +54,7 @@ Now, do the same thing for your settings and hotkeys.
 
 **It is important to first back up this data securely before trying to set it to something else. Incase something goes wrong, you can always revert it.**
 
-In order to set your skin list, you just paste it in the appropriate text field, click the button below and refresh the page. 
+In order to set/add your skin list, you just paste it in the appropriate text field, click the button below and refresh the page. 
 
 As an example let's say you want to send your skin list to your friend. 
 1. you and your friends need to install this extension.

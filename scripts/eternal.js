@@ -1,12 +1,12 @@
 //global stuff
 const screenwidth = screen.width;
-const version = "2.1.3";
-const latestFeatures = 'Latest features: Made it harder to accidentally delete your skin list, settings and hotkeys';
+const version = "2.1.4";
+const latestFeatures = 'Latest features: Added hint how to clear skin list on the "Set skin list" button, various optimizations';
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
 const messageList = document.querySelector(".message-list");
-let colorCode = 1;
+let colorCode = 0;
 let css = document.createElement("style");
 document.head.appendChild(css);
 css.appendChild(document.createTextNode(`
@@ -42,42 +42,15 @@ css.appendChild(document.createTextNode(`
 //setting variables
 let amountRulesAdded = 0;
 
-let theme = 0;
-if (localStorage.getItem("theme") !== null) {
-    theme = parseInt(localStorage.getItem("theme"));
-}
-let adblocker = false;
-if (localStorage.getItem("adblocker") !== null) {
-    adblocker = localStorage.getItem("adblocker") === "true";
-}
-let oldChatStyling = true;
-if (localStorage.getItem("oldChatStyling") !== null) {
-    oldChatStyling = localStorage.getItem("oldChatStyling") === "true";
-}
-let rainbowTime = false;
-if (localStorage.getItem("rainbowTime") !== null) {
-    rainbowTime = localStorage.getItem("rainbowTime") === "true";
-}
-let messageTime = true;
-if (localStorage.getItem("messageTime") !== null) {
-    messageTime = localStorage.getItem("messageTime") === "true";
-}
-let msDigits = 1;
-if (localStorage.getItem("msDigits") !== null) {
-    msDigits = parseInt(localStorage.getItem("msDigits"));
-}
-let rainbowText = false;
-if (localStorage.getItem("rainbowText") !== null) {
-    rainbowText = localStorage.getItem("rainbowText") === "true";
-}
-let deleteStatScreenAd = false;
-if (localStorage.getItem("deleteStatScreenAd") !== null) {
-    deleteStatScreenAd = localStorage.getItem("deleteStatScreenAd") === "true";
-}
-let extOptionsHidden = false;
-if (localStorage.getItem("extOptionsHidden") !== null) {
-    extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true";
-}
+let theme = parseInt(localStorage?.getItem("theme")) || 0;
+let adblocker = localStorage?.getItem("adblocker") === "true" || false;
+let oldChatStyling = localStorage.getItem("oldChatStyling") === "true" || true;
+let rainbowTime = localStorage.getItem("rainbowTime") === "true" || false;
+let messageTime = localStorage.getItem("messageTime") === "true" || true;
+let msDigits = parseInt(localStorage.getItem("msDigits")) || 1;
+let rainbowText = localStorage.getItem("rainbowText") === "true" || false;
+let deleteStatScreenAd = localStorage.getItem("deleteStatScreenAd") === "true" || false;
+let extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true" || false;
 
 updateTheme();
 addChangeThemeButton();
@@ -159,7 +132,6 @@ function addChangeThemeButton() {
     themeButtonText.id = "theme-button-text";
     themeButtonText.style.margin = "5px 0px";
     themeButtonText.innerHTML = "Theme " + theme;
-    themeButtonText.style.textDecoration = "underline";
     // themeButtonText.style.borderLeft = "1px solid black";
     // themeButtonText.style.borderRight = "1px solid black";
     themeButtonText.style.padding = "0px 5px";
@@ -211,89 +183,47 @@ function updateTheme() {
     for (let i = 0; i < amountRulesAdded; i++) {
         ss.deleteRule(0);
     }
+    let basicTheme = (primary, secondary, rad1, rad2, rad3) => {
+        ss.insertRule(`::-webkit-scrollbar-thumb {background-color: ${primary} !important;}`, 0);
+        ss.insertRule(`#overlay {background: radial-gradient(rgba(${rad1}, ${rad2}, ${rad3}, 0.75) 300px,rgba(0,0,0,.75)) !important;}`, 0);
+        ss.insertRule(`.fade-box, .replay-list-header, .swal2-popup, .tooltip {background: linear-gradient(to right bottom, ${primary}, ${secondary}) !important;}`, 0);
+        return 3;
+    }
     switch (theme) {
         case 0:
             //default background: linear-gradient(to right bottom, #273b5e, #0f1724); rgba(0,17,33,.75)
             amountRulesAdded = 0;
             break;
-
         case 1:
             //purple
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2757 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(31, 0, 33, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #5e2757, #240f21) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#5e2757", "#240f21", 31, 0, 33);
             break;
-
         case 2:
             //wine red
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e2730 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 0, 10, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #5e2730, #240f13) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#5e2730", "#240f13", 33, 0, 10);
             break;
-
         case 3:
             //petrol
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #275e42 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 11, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #275e42, #0f2419) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#275e42", "#0f2419", 0, 33, 11)
             break;
-
         case 4:
             //cyan
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #52afb7 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 33, 31, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #52afb7, #275a5e) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#52afb7", "#275a5e", 0, 33, 31)
             break;
-
         case 5:
             //brown -202°
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e3627 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 4, 0, .75) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #5e3627, #24140f) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#5e3627", "#24140f", 33, 4, 0)
             break;
-
         case 6:
             //cactus 194°
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #5e5727 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(33, 24, 0, 0.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #5e5727, #24210f) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#5e5727", "#24210f", 33, 24, 0)
             break;
-
         case 7:
             //misavers
-            ss.insertRule('::-webkit-scrollbar-thumb {background: url(' + misaversUrl + ') !important;}', 0);
+            ss.insertRule('::-webkit-scrollbar-thumb, .fade-box, .replay-list-header, .swal2-popup, .tooltip {background: url(' + misaversUrl + ') !important;}', 0);
             ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: url(' + misaversUrl + ') !important;}', 0);
-            ss.insertRule('.replay-list-header {background: url(' + misaversUrl + ') !important;}', 0);
-            ss.insertRule('.swal2-popup {background: url(' + misaversUrl + ') !important;}', 0);
-            ss.insertRule('.tooltip {background: url(' + misaversUrl + ') !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = 2;
             break;
-
         case 8:
             //quotes
             ss.insertRule('::-webkit-scrollbar-thumb {background: url(' + misaversUrl + ') !important;}', 0);
@@ -306,66 +236,35 @@ function updateTheme() {
             break;
         case 9:
             //transparent
-            ss.insertRule('.fade-box {background: rgba(0,0,0,0)!important;}', 0);
-            ss.insertRule('.replay-list-header {background: rgba(0,0,0,0)!important;}', 0);
-            ss.insertRule('.swal2-popup {background: rgba(0,0,0,0)!important;}', 0);
-            ss.insertRule('.tooltip {background: rgba(0,0,0,0)!important;}', 0);
-            amountRulesAdded = 4;
+            amountRulesAdded = basicTheme("#000000", "#000000", 0, 17, 33)
             break;
-
         case 10:
             //animation
-            ss.insertRule('.fade-box {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
-            ss.insertRule('.tooltip {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
-            amountRulesAdded = 2;
+            ss.insertRule('.fade-box, .tooltip {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
+            amountRulesAdded = 1;
             break;
-
         case 11:
             //blue black
             //for overlay: top left gradient color darkened 90%
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #009eff !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0, 16, 25, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #009eff, #000000) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#009eff", "#000000", 0, 16, 25);
             break;
 
         case 12:
             //red black
             //for overlay: top left gradient color darkened 90%
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #ff0000 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(25, 0, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #ff0000, #000000) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#ff0000, #000000", 25, 0, 0)
             break;
 
         case 13:
             //red black 2
             //for overlay: top left gradient color darkened 80%
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #960000 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(30, 0, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #960000, #000000) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#960000", "#000000", 30, 0, 0)
             break;
 
         case 14:
             //orange black 2
             //for overlay: top left gradient color darkened 90%
-            ss.insertRule('::-webkit-scrollbar-thumb {background-color: #ff4c00 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(25, 8, 0, 0.75) 300px, rgba(0,0,0,.75)) !important;}', 0);
-            ss.insertRule('.fade-box {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 0);
-            ss.insertRule('.tooltip {background: linear-gradient(to right bottom, #ff4c00, #000000) !important;}', 0);
-            amountRulesAdded = 6;
+            amountRulesAdded = basicTheme("#ff4c00", "#000000", 25, 8, 0)
             break;
 
         default:
@@ -397,7 +296,7 @@ function addBigChatButton() {
 }
 function addResetMessageTimeColorButton() {
     document.querySelector("#reset-message-time-color").onclick = function () {
-        colorCode = 1;
+        colorCode = 0;
     }
 }
 //messages show time posted
@@ -437,44 +336,12 @@ function addTimeToMessages() {
         messageTimeElement.style.marginBottom = "auto";
         messageTimeElement.innerHTML = time;
         if (rainbowTime) {
-            switch (colorCode) {
-                case 1:
-                    messageTimeElement.style.color = "red";
-                    break;
-
-                case 2:
-                    messageTimeElement.style.color = "darkorange";
-                    break;
-
-                case 3:
-                    messageTimeElement.style.color = "yellow";
-                    break;
-
-                case 4:
-                    messageTimeElement.style.color = "lime";
-                    break;
-
-                case 5:
-                    messageTimeElement.style.color = "cyan";
-                    break;
-
-                case 6:
-                    messageTimeElement.style.color = "dodgerblue";
-                    break;
-
-                case 7:
-                    messageTimeElement.style.color = "blueviolet";
-                    break;
-
-                case 0:
-                    messageTimeElement.style.color = "magenta";
-                    break;
-            }
+            let colors = ["red", "darkorange", "yellow", "lime", "cyan", "dodgerblue", "blueviolet", "magenta"];
+            messageTimeElement.style.color = colors[colorCode] || "#fff";
             colorCode = (colorCode + 1) % 8;
         }
-
         else {
-            messageTimeElement.style.color = "rgb(255, 255, 255)";
+            messageTimeElement.style.color = "#fff";
         }
         return messageTimeElement;
     }
@@ -530,8 +397,7 @@ function addTimeToMessages() {
 
 function makeOldChatStyling() {
     //set to 100 so it doesn't interfere with the rules for theme
-    ss.insertRule('.message-from {font-size: 14px !important;}', 100);
-    ss.insertRule('.message-from-name {font-size: 14px !important;}', 100);
+    ss.insertRule('.message-from, .message-from-name {font-size: 14px !important;}', 100);
     ss.insertRule('.message-row {align-items: baseline !important;}', 100);
 }
 
@@ -556,6 +422,10 @@ function addOptionsMenu() {
     optionsDiv.style.top = "60px";
     optionsDiv.style.backgroundColor = "rgb(0,0,0,.5)";
     optionsDiv.style.color = "white"
+    const setSkinListTip = "Click this button to overwrite your current skin list with the new one above. Type 'clear' and click to clear your skin list. Reload page to see the new skin list.";
+    const addToSkinListTip = "Click this button to add the list of skins above to your current skin list. Reload page to see the new skin list.";
+    const setSettingsTip = "Paste the settings in the text field above and then click this button. Reload page to play with the new settings.";
+    const setHotkeysTip = "Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.";
     optionsDiv.innerHTML = `
     <div class="tabs">
     <div class="tab active" id="ext-options-tab-general">General</div>
@@ -586,16 +456,16 @@ function addOptionsMenu() {
     <div id="ext-options-misc" style="padding: 16px; display: none;">
     <button class="vanis-menu-button mt10" id="copy-skin-list-button" tip="Click to copy your skin list to send it to someone else or save it somewhere secure.">Copy skin list to clipboard</button>
     <input class="vanis-menu-tf mt10" id="set-skin-list-tf" placeholder="Set skin list..."></input>
-    <button class="vanis-menu-button mt10" id="set-skin-list-button" tip="Paste the skin list in the text field above and then click this button to overwrite your current skin list with the new one. Reload page to see the new skin list.">Set</button>
-    <button style="margin-left: 5px;" class="vanis-menu-button mt10" id="add-to-skin-list-button" tip="Click this button to add the list of skins above to your current skin list. Reload page to see the new skin list.">Add</button>
+    <button class="vanis-menu-button mt10" id="set-skin-list-button" tip="${setSkinListTip}">Set</button>
+    <button style="margin-left: 5px;" class="vanis-menu-button mt10" id="add-to-skin-list-button" tip="${addToSkinListTip}">Add</button>
     <br>
     <button class="vanis-menu-button mt10" id="copy-settings-button" tip="Click to copy your vanis settings to send them to someone else or save them somewhere secure.">Copy settings to clipboard</button>
     <input class="vanis-menu-tf mt10" id="set-settings-tf" placeholder="Set settings..."></input>
-    <button class="vanis-menu-button mt10" id="set-settings-button" tip="Paste the settings in the text field above and then click this button. Reload page to play with the new settings.">Set</button>
+    <button class="vanis-menu-button mt10" id="set-settings-button" tip="${setSettingsTip}">Set</button>
     <br>
     <button class="vanis-menu-button mt10" id="copy-hotkeys-button" tip="Click to copy your vanis hotkeys to send them to someone else or save them somewhere secure.">Copy hotkeys to clipboard</button>
     <input class="vanis-menu-tf mt10" id="set-hotkeys-tf" placeholder="Set hotkeys..."></input>
-    <button class="vanis-menu-button mt10" id="set-hotkeys-button" tip="Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.">Set</button>
+    <button class="vanis-menu-button mt10" id="set-hotkeys-button" tip="${setHotkeysTip}">Set</button>
     <br>
     
     </div>
@@ -681,7 +551,7 @@ function addOptionsMenu() {
         }
         function success(action) {
             setSkinListButton.innerHTML = `Skin list ${action}!`;
-            setSkinListButton.setAttribute("tip", "Paste the skin list in the text field above and then click this button to overwrite your current skin list with the new one. Reload page to see the new skin list.")
+            setSkinListButton.setAttribute("tip", setSkinListTip);
             document.getElementById("set-skin-list-tf").value = "";
         }
     }
@@ -696,10 +566,11 @@ function addOptionsMenu() {
                 let oldSkins = Array.from(JSON.parse(localStorage.getItem("skins")));
                 localStorage.setItem("skins", JSON.stringify(oldSkins.concat(...newSkins)));
             }
-            catch(e) {
+            catch (e) {
                 localStorage.setItem("skins", value);
-            }            
+            }
             addToSkinListButton.innerHTML = `${newSkins.length} skins added!`;
+            addToSkinListButton.setAttribute("tip", addToSkinListTip);
             document.getElementById("set-skin-list-tf").value = "";
             success("updated")
         }
@@ -724,12 +595,12 @@ function addOptionsMenu() {
     let setSettingsButton = document.querySelector("#set-settings-button")
     setSettingsButton.onclick = function () {
         const value = document.getElementById("set-settings-tf").value.trim();
-        if(isValidJSON(value)) {
+        if (isValidJSON(value)) {
             localStorage.setItem("settings", value);
             setSettingsButton.innerHTML = "Settings updated!";
-            setSettingsButton.setAttribute("tip", "Paste the settings in the text field above and then click this button. Reload page to play with the new settings.")
+            setSettingsButton.setAttribute("tip", setSettingsTip)
             document.getElementById("set-settings-tf").value = "";
-        } 
+        }
         else {
             setSettingsButton.innerHTML = "Error";
             setSettingsButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.")
@@ -751,12 +622,12 @@ function addOptionsMenu() {
     let setHotkeysButton = document.querySelector("#set-hotkeys-button")
     setHotkeysButton.onclick = function () {
         const value = document.getElementById("set-hotkeys-tf").value.trim();
-        if(isValidJSON(value)) {
+        if (isValidJSON(value)) {
             localStorage.setItem("hotkeys", value);
             setHotkeysButton.innerHTML = "Hotkeys updated!";
-            setSettingsButton.setAttribute("tip", "Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.")
+            setHotkeysButton.setAttribute("tip", setHotkeysTip);
             document.getElementById("set-hotkeys-tf").value = "";
-        } 
+        }
         else {
             setHotkeysButton.innerHTML = "Error";
             setHotkeysButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.")
@@ -777,9 +648,7 @@ function openExtOptionsTab(tabName) {
 }
 
 function makeRainbowText() {
-    ss.insertRule('.fade-box {animation: colorRotate 6s linear 0s infinite !important;}', 100)
-    ss.insertRule('.replay-list-header {animation: colorRotate 6s linear 0s infinite !important;}', 100);
-    ss.insertRule('.swal2-title {animation: colorRotate 6s linear 0s infinite !important;}', 100);
+    ss.insertRule('.fade-box, .replay-list-header, .swal2-title {animation: colorRotate 6s linear 0s infinite !important;}', 100)
 }
 
 function deleteStatScreenAdd() {
@@ -798,7 +667,6 @@ function addExtOptionsToggleButton() {
     extOptionsToggleButton.style.margin = "0px 4px";
     extOptionsToggleButton.style.boxShadow = '0 0 1px 1px #000';
     extOptionsToggleButton.style.textAlign = "center";
-    extOptionsToggleButton.style.textDecoration = "underline";
     extOptionsToggleButton.innerHTML = "Toggle Extension Menu";
     extOptionsToggleButton.onmouseenter = function () {
         this.style.background = "#2b9047";
