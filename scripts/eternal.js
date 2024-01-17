@@ -1,6 +1,6 @@
 //global stuff
 const screenwidth = screen.width;
-const version = "2.1.4";
+const version = "2.1.5";
 const latestFeatures = 'Latest features: Added hint how to clear skin list on the "Set skin list" button, various optimizations';
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
@@ -236,7 +236,7 @@ function updateTheme() {
             break;
         case 9:
             //transparent
-            amountRulesAdded = basicTheme("#000000", "#000000", 0, 17, 33)
+            amountRulesAdded = basicTheme("#00000000", "#00000000", 0, 17, 33)
             break;
         case 10:
             //animation
@@ -252,7 +252,7 @@ function updateTheme() {
         case 12:
             //red black
             //for overlay: top left gradient color darkened 90%
-            amountRulesAdded = basicTheme("#ff0000, #000000", 25, 0, 0)
+            amountRulesAdded = basicTheme("#ff0000", "#000000", 25, 0, 0)
             break;
 
         case 13:
