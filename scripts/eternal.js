@@ -236,7 +236,8 @@ function updateTheme() {
             break;
         case 9:
             //transparent
-            amountRulesAdded = basicTheme("#00000000", "#00000000", 0, 17, 33)
+            ss.insertRule('.fade-box, .replay-list-header, .swal2-popup, .tooltip {background: #00000000 !important;}', 0);
+            amountRulesAdded = 1;
             break;
         case 10:
             //animation
