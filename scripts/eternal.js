@@ -1,7 +1,7 @@
 //global stuff
 const screenwidth = screen.width;
-const version = "2.1.5";
-const latestFeatures = 'Latest features: Added hint how to clear skin list on the "Set skin list" button, various optimizations';
+const version = "2.1.6";
+const latestFeatures = `Latest features: Fixed bug where some settings don't save when reloading page`;
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
@@ -42,15 +42,15 @@ css.appendChild(document.createTextNode(`
 //setting variables
 let amountRulesAdded = 0;
 
-let theme = parseInt(localStorage?.getItem("theme")) || 0;
-let adblocker = localStorage?.getItem("adblocker") === "true" || false;
-let oldChatStyling = localStorage.getItem("oldChatStyling") === "true" || true;
-let rainbowTime = localStorage.getItem("rainbowTime") === "true" || false;
-let messageTime = localStorage.getItem("messageTime") === "true" || true;
-let msDigits = parseInt(localStorage.getItem("msDigits")) || 1;
-let rainbowText = localStorage.getItem("rainbowText") === "true" || false;
-let deleteStatScreenAd = localStorage.getItem("deleteStatScreenAd") === "true" || false;
-let extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true" || false;
+let theme = parseInt(localStorage?.getItem("theme")) ?? 0;
+let adblocker = localStorage?.getItem("adblocker") === "true" ?? false;
+let oldChatStyling = localStorage.getItem("oldChatStyling") === "true" ?? true;
+let rainbowTime = localStorage.getItem("rainbowTime") === "true" ?? false;
+let messageTime = localStorage.getItem("messageTime") === "true" ?? true;
+let msDigits = parseInt(localStorage.getItem("msDigits")) ?? 1;
+let rainbowText = localStorage.getItem("rainbowText") === "true" ?? false;
+let deleteStatScreenAd = localStorage.getItem("deleteStatScreenAd") === "true" ?? false;
+let extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true" ?? false;
 
 updateTheme();
 addChangeThemeButton();
@@ -270,6 +270,7 @@ function updateTheme() {
 
         default:
             console.log("You shouldn't see this");
+            amountRulesAdded = 0;
     }
     localStorage.setItem("theme", theme);
 }
