@@ -1,7 +1,7 @@
 //global stuff
 const screenwidth = screen.width;
 const version = "2.1.6";
-const latestFeatures = `Latest features: Fixed bug where some settings don't save when reloading page`;
+const latestFeatures = `Latest features: Fixed bug where some settings don't save when reloading page, Fixed bug where this text didn't show properly (lol)`;
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
@@ -453,7 +453,7 @@ function addOptionsMenu() {
     <input type="checkbox" id="deleteStatScreenAdCheckBox"><br>
     <button id="big-chat" class="vanis-menu-button mt10">Big Chat</button><br>
     <button id="reset-message-time-color" class="vanis-menu-button mt10">Reset Message Time Color</button><br>
-    <p style="position: absolute; bottom: 10px;" tip='${latestFeatures}'> Eternal Extension v${version}</p>
+    <p style="position: absolute; bottom: 10px;" tip="${latestFeatures}"> Eternal Extension v${version}</p>
     </div>
     <div id="ext-options-misc" style="padding: 16px; display: none;">
     <button class="vanis-menu-button mt10" id="copy-skin-list-button" tip="Click to copy your skin list to send it to someone else or save it somewhere secure.">Copy skin list to clipboard</button>
