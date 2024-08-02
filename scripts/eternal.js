@@ -271,6 +271,7 @@ function updateTheme() {
         default:
             console.log("You shouldn't see this");
             amountRulesAdded = 0;
+            theme = 0;
     }
     localStorage.setItem("theme", theme);
 }
