@@ -1,7 +1,10 @@
 //global stuff
 const screenwidth = screen.width;
-const version = "2.1.7";
-const latestFeatures = `Latest features: Fixed minor bug (ms digits showing as NaN if not previously set)`;
+const version = "2.1.8";
+const latestFeatures = `- Added Chat Message Translation\n
+- Added option to get a popup of new changes when extension gets an update\n
+- Added Theme 15, which can be customized
+Hover over these options in the extension menu for more detail.`;
 const ss = document.styleSheets[0];
 const socialContainer = document.querySelector(".social-container");
 socialContainer.style.width = "auto";
@@ -50,6 +53,10 @@ let messageTime = localStorage.getItem("messageTime") === "true" ?? true;
 let msDigits = parseInt(localStorage.getItem("msDigits") ?? 1);
 let rainbowText = localStorage.getItem("rainbowText") === "true" ?? false;
 let deleteStatScreenAd = localStorage.getItem("deleteStatScreenAd") === "true" ?? false;
+let offerTranslation = localStorage.getItem("offerTranslation") === "true" ?? false;
+let alertUpdates = localStorage.getItem("alertUpdates") === "true" ?? false;
+let themeColor1 = localStorage.getItem("theme-color1") ?? "#000000";
+let themeColor2 = localStorage.getItem("theme-color2") ?? "#000000";
 let extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true" ?? false;
 
 updateTheme();
@@ -72,7 +79,8 @@ if (deleteStatScreenAd) {
     deleteStatScreenAdd();
 }
 addExtOptionsToggleButton();
-
+alertExtUpdates();
+localStorage.setItem("previousVersion", version)
 
 function addAnimations() {
     css.appendChild(document.createTextNode(`
@@ -116,7 +124,7 @@ function lowerPlayerData() {
 function addChangeThemeButton() {
 
     //Change Theme parent button
-    let amountThemes = 15;
+    let amountThemes = 16;
     const themeButton = document.createElement('div');
     themeButton.id = "theme-button";
     themeButton.style.display = "flex";
@@ -145,7 +153,7 @@ function addChangeThemeButton() {
     themeMinus.style.padding = "5px 0px";
     themeMinus.style.borderTopLeftRadius = "4px";
     themeMinus.style.borderBottomLeftRadius = "4px";
-    themeMinus.onclick = function () {
+    themeMinus.onclick = () => {
         theme--;
         if (theme == -1) {
             theme = amountThemes - 1;
@@ -163,7 +171,7 @@ function addChangeThemeButton() {
     themePlus.style.padding = "5px 0px";
     themePlus.style.borderTopRightRadius = "4px";
     themePlus.style.borderBottomRightRadius = "4px";
-    themePlus.onclick = function () {
+    themePlus.onclick = () => {
         theme++;
         theme = theme % amountThemes;
         updateTheme();
@@ -219,13 +227,13 @@ function updateTheme() {
             amountRulesAdded = basicTheme("#5e5727", "#24210f", 33, 24, 0)
             break;
         case 7:
-            //misavers
+            //misavers (broken since discord image links expire, idk what to do with it yet)
             ss.insertRule('::-webkit-scrollbar-thumb, .fade-box, .replay-list-header, .swal2-popup, .tooltip {background: url(' + misaversUrl + ') !important;}', 0);
             ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
             amountRulesAdded = 2;
             break;
         case 8:
-            //quotes
+            //quotes (broken since discord image links expire, idk what to do with it yet)
             ss.insertRule('::-webkit-scrollbar-thumb {background: url(' + misaversUrl + ') !important;}', 0);
             ss.insertRule('.fade-box {background: url(' + misaversUrl + ') !important;}', 0);
             ss.insertRule('.swal2-popup {background: url(' + misaversUrl + ') !important;}', 0);
@@ -268,6 +276,10 @@ function updateTheme() {
             amountRulesAdded = basicTheme("#ff4c00", "#000000", 25, 8, 0)
             break;
 
+        case 15:
+            amountRulesAdded = basicTheme(themeColor1, themeColor2, 0, 0, 0)
+            break;
+
         default:
             console.log("You shouldn't see this");
             amountRulesAdded = 0;
@@ -281,7 +293,7 @@ function addBigChatButton() {
     let originalHeight;
 
     const bigChatButton = document.querySelector("#big-chat");
-    bigChatButton.onclick = function () {
+    bigChatButton.onclick = () => {
         makeChatBig();
     }
     function makeChatBig() {
@@ -297,12 +309,15 @@ function addBigChatButton() {
     }
 }
 function addResetMessageTimeColorButton() {
-    document.querySelector("#reset-message-time-color").onclick = function () {
-        colorCode = 0;
-    }
+    document.querySelector("#reset-message-time-color").onclick = () => colorCode = 0;
 }
+
 //messages show time posted
 function addTimeToMessages() {
+
+    /**
+     * @returns HTMLSpanElement containing the current time
+     */
     function createTimeStamp() {
         const now = new Date();
         let seconds = now.getSeconds();
@@ -348,21 +363,57 @@ function addTimeToMessages() {
         return messageTimeElement;
     }
 
+    function createTranslationIcon(messageContent) {
+        const svgText = `<svg height="16px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect x="0" fill="none" width="20" height="20"/><g><path d="M11 7H9.49c-.63 0-1.25.3-1.59.7L7 5H4.13l-2.39 7h1.69l.74-2H7v4H2c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h7c1.1 0 2 .9 2 2v2zM6.51 9H4.49l1-2.93zM10 8h7c1.1 0 2 .9 2 2v7c0 1.1-.9 2-2 2h-7c-1.1 0-2-.9-2-2v-7c0-1.1.9-2 2-2zm7.25 5v-1.08h-3.17V9.75h-1.16v2.17H9.75V13h1.28c.11.85.56 1.85 1.28 2.62-.87.36-1.89.62-2.31.62-.01.02.22.97.2 1.46.84 0 2.21-.5 3.28-1.15 1.09.65 2.48 1.15 3.34 1.15-.02-.49.2-1.44.2-1.46-.43 0-1.49-.27-2.38-.63.7-.77 1.14-1.77 1.25-2.61h1.36zm-3.81 1.93c-.5-.46-.85-1.13-1.01-1.93h2.09c-.17.8-.51 1.47-1 1.93l-.04.03s-.03-.02-.04-.03z"/></g></svg>`
+        const icon = new DOMParser().parseFromString(svgText, "image/svg+xml").documentElement;
+        // icon.onclick = (t) => {
+        //     fetch("https://libretranslate.com/detect", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         },
+        //         body: JSON.stringify({
+        //             q: "Welche Sprache?"
+        //         })
+        //     }).then(d => {
+        //         console.log(d)
+        //     })
+        // }
+        let link = document.createElement("a");
+        link.href = `https://translate.google.com/?sl=auto&tl=en&op=translate&text=${messageContent}`;
+        link.target = "_blank";
+        link.appendChild(icon);
+        link.style.marginLeft = "6px";
+        link.classList.add("translation")
+        return link;
+    }
+
     let firstTime = true;
-    let oldChildElementCount;
+    let oldMessageListChildElementCount;
     const config = { attributes: false, childList: true, subtree: false };
     const callback = (mutationList, observer) => {
         for (const mutation of mutationList) {
+
+            //when new message appears
+            oldMessageListChildElementCount = messageList.childElementCount;
+
             if (messageTime) {
-                oldChildElementCount = messageList.childElementCount;
-                let messageTimeElement = createTimeStamp();
-                const newMessage = messageList.lastChild;
-                newMessage?.prepend(messageTimeElement);
+                messageList.lastChild.prepend(createTimeStamp());
                 if (firstTime) {
                     fixTimestampsAfterFullChat();
                     firstTime = !firstTime;
-
                 }
+            }
+            if (offerTranslation) {
+                // console.log(messageList.lastChild.childNodes)
+                const messageContent = messageList.lastChild.querySelector(".message-text").textContent;
+                messageList.lastChild.append(createTranslationIcon(messageContent));
+            }
+            messageList.lastChild.querySelector(".message-text").onclick = (e) => {
+                navigator.clipboard.writeText(e.target.textContent).catch(err => {
+                    console.log(err);
+
+                })
             }
         }
     };
@@ -371,24 +422,28 @@ function addTimeToMessages() {
 
     function fixTimestampsAfterFullChat() {
         const toObserve = messageList;
-        const observer2 = new MutationObserver((mutationsList) => {
-            if (toObserve.childElementCount == oldChildElementCount) {
-                cascadeTimestamps();
+        const observer2 = new MutationObserver(() => {
+            if (toObserve.childElementCount == oldMessageListChildElementCount) {
+                cascadeTimestampsAndTranslation();
             }
         });
         observer2.observe(toObserve, { subtree: true, characterData: true });
     }
 
-    function cascadeTimestamps() {
+    function cascadeTimestampsAndTranslation() {
+        const newMessage = messageList.lastChild;
         for (let i = 0; i < 99; i++) {
             messageList.childNodes[i].firstChild.innerHTML = messageList.childNodes[i + 1].firstChild.innerHTML;
             messageList.childNodes[i].firstChild.style.color = messageList.childNodes[i + 1].firstChild.style.color;
+            messageList.childNodes[i].querySelector(".translation").href = messageList.childNodes[i + 1].querySelector(".translation").href;
         }
         let messageTimeElement = createTimeStamp();
-        const newMessage = messageList.lastChild;
         newMessage.prepend(messageTimeElement);
         newMessage.childNodes[1].remove();
 
+        let translationIcon = createTranslationIcon(newMessage.querySelector(".message-text").textContent);
+        newMessage.querySelector(".translation").remove();
+        newMessage.append(translationIcon);
 
     }
 
@@ -428,10 +483,12 @@ function addOptionsMenu() {
     const addToSkinListTip = "Click this button to add the list of skins above to your current skin list. Reload page to see the new skin list.";
     const setSettingsTip = "Paste the settings in the text field above and then click this button. Reload page to play with the new settings.";
     const setHotkeysTip = "Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.";
+    const saveThemeTip = "Enter hex color codes (with or without the leading #). You can add transparency by adding 2 more digits (#ffffff00 is completely transparent)";
     optionsDiv.innerHTML = `
     <div class="tabs">
     <div class="tab active" id="ext-options-tab-general">General</div>
     <div class="tab" id="ext-options-tab-misc" tip='DANGEROUS! Please read the tutorial in the "README.md" file, and message eternal8910 if you have any questions, before clicking anything in this tab.'>Misc</div>
+    <div class="tab" id="ext-options-tab-theme" tip='Customize Theme 15'>Theme</div>
     </div>
 
     <div id="ext-options-general" style="padding: 16px;">
@@ -449,11 +506,15 @@ function addOptionsMenu() {
     <input type="checkbox" id="oldChatStylingCheckBox"><br>
     <label for="rainbowTextCheckBox" tip="Changes the menu text color to be animated. Reload page to apply changes.">Rainbow Text:</label> 
     <input type="checkbox" id="rainbowTextCheckBox"><br>
-    <label for="deleteStatScreenAdCheckBox" tip="Deletes the ad on the stat screen, so your mouse movement is still accurate when you play with the stat screen still open(I heard some people actually do that)">Delete Respawn Ad:</label> 
+    <label for="deleteStatScreenAdCheckBox" tip="Deletes the ad on the stat screen, so your mouse movement is still accurate when you play with the stat screen still open">Delete Respawn Ad:</label> 
     <input type="checkbox" id="deleteStatScreenAdCheckBox"><br>
+    <label for="offerTranslationCheckBox" tip="Display option to translate next to a chat message.">Offer Translation:</label>
+    <input type="checkbox" id="offerTranslationCheckBox"><br>
+    <label for="alertUpdatesCheckBox" tip="Gives a popup with all the new features whenever the extension is updated">Alert Updates:</label>
+    <input type="checkbox" id="alertUpdatesCheckBox"><br>
     <button id="big-chat" class="vanis-menu-button mt10">Big Chat</button><br>
     <button id="reset-message-time-color" class="vanis-menu-button mt10">Reset Message Time Color</button><br>
-    <p style="position: absolute; bottom: 10px;" tip="${latestFeatures}"> Eternal Extension v${version}</p>
+    <p style="position: absolute; bottom: 10px;" tip="Latest features:\n${latestFeatures}"> Eternal Extension v${version}</p>
     </div>
     <div id="ext-options-misc" style="padding: 16px; display: none;">
     <button class="vanis-menu-button mt10" id="copy-skin-list-button" tip="Click to copy your skin list to send it to someone else or save it somewhere secure.">Copy skin list to clipboard</button>
@@ -469,63 +530,81 @@ function addOptionsMenu() {
     <input class="vanis-menu-tf mt10" id="set-hotkeys-tf" placeholder="Set hotkeys..."></input>
     <button class="vanis-menu-button mt10" id="set-hotkeys-button" tip="${setHotkeysTip}">Set</button>
     <br>
-    
+    </div>
+    <div id="ext-options-theme" style="padding: 16px; display: none;">
+    <p>Theme 15:</p>
+    <input class="vanis-menu-tf mt10" id="theme-color1-tf" placeholder="Set color 1..."></input>
+    <input class="vanis-menu-tf mt10" id="theme-color2-tf" placeholder="Set color 2..."></input>
+    <button class="vanis-menu-button mt10" id="save-theme-button" tip="${saveThemeTip}">Save Theme</button>
     </div>
        `;
     document.getElementById("main-container").append(optionsDiv);
 
-    optionsDiv.children[0].children[0].onclick = function () { openExtOptionsTab("general") };
-    optionsDiv.children[0].children[1].onclick = function () { openExtOptionsTab("misc") };
+    optionsDiv.children[0].children[0].onclick = () => openExtOptionsTab("general");
+    optionsDiv.children[0].children[1].onclick = () => openExtOptionsTab("misc");
+    optionsDiv.children[0].children[2].onclick = () => openExtOptionsTab("theme")
 
     //general tab
     document.getElementById("messageTimeCheckBox").checked = messageTime;
-    document.getElementById("messageTimeCheckBox").onclick = function () {
+    document.getElementById("messageTimeCheckBox").onclick = () => {
         messageTime = this.checked;
         localStorage.setItem("messageTime", messageTime);
 
-    }
-
-    document.getElementById("adblockerCheckBox").checked = adblocker;
-    document.getElementById("adblockerCheckBox").onclick = function () {
-        adblocker = !adblocker;
-        localStorage.setItem("adblocker", adblocker);
-    }
-    document.getElementById("oldChatStylingCheckBox").checked = oldChatStyling;
-    document.getElementById("oldChatStylingCheckBox").onclick = function () {
-        oldChatStyling = !oldChatStyling;
-        localStorage.setItem("oldChatStyling", oldChatStyling);
-    }
-    document.getElementById("rainbowTimeCheckBox").checked = rainbowTime;
-    document.getElementById("rainbowTimeCheckBox").onclick = function () {
-        rainbowTime = !rainbowTime;
-        localStorage.setItem("rainbowTime", rainbowTime);
-    }
-    document.getElementById("deleteStatScreenAdCheckBox").checked = deleteStatScreenAd;
-    document.getElementById("deleteStatScreenAdCheckBox").onclick = function () {
-        deleteStatScreenAd = !deleteStatScreenAd;
-        localStorage.setItem("deleteStatScreenAd", deleteStatScreenAd);
     }
 
     let msDigitsSlider = document.getElementById("msDigitsSlider");
 
     msDigitsSlider.value = msDigits;
     document.getElementById("msDigitsDisplay").innerHTML = msDigits;
-    msDigitsSlider.oninput = function () {
+    msDigitsSlider.oninput = () => {
         msDigits = msDigitsSlider.value;
         document.getElementById("msDigitsDisplay").innerHTML = msDigits;
         localStorage.setItem("msDigits", msDigits);
     }
 
+    document.getElementById("rainbowTimeCheckBox").checked = rainbowTime;
+    document.getElementById("rainbowTimeCheckBox").onclick = () => {
+        rainbowTime = !rainbowTime;
+        localStorage.setItem("rainbowTime", rainbowTime);
+    }
+
+    document.getElementById("adblockerCheckBox").checked = adblocker;
+    document.getElementById("adblockerCheckBox").onclick = () => {
+        adblocker = !adblocker;
+        localStorage.setItem("adblocker", adblocker);
+    }
+
+    document.getElementById("oldChatStylingCheckBox").checked = oldChatStyling;
+    document.getElementById("oldChatStylingCheckBox").onclick = () => {
+        oldChatStyling = !oldChatStyling;
+        localStorage.setItem("oldChatStyling", oldChatStyling);
+    }
+
     document.getElementById("rainbowTextCheckBox").checked = rainbowText;
-    document.getElementById("rainbowTextCheckBox").onclick = function () {
+    document.getElementById("rainbowTextCheckBox").onclick = () => {
         rainbowText = !rainbowText;
         localStorage.setItem("rainbowText", rainbowText);
+    }
+    document.getElementById("deleteStatScreenAdCheckBox").checked = deleteStatScreenAd;
+    document.getElementById("deleteStatScreenAdCheckBox").onclick = () => {
+        deleteStatScreenAd = !deleteStatScreenAd;
+        localStorage.setItem("deleteStatScreenAd", deleteStatScreenAd);
+    }
+    document.getElementById("offerTranslationCheckBox").checked = offerTranslation;
+    document.getElementById("offerTranslationCheckBox").onclick = () => {
+        offerTranslation = !offerTranslation;
+        localStorage.setItem("offerTranslation", offerTranslation);
+    }
+    document.getElementById("alertUpdatesCheckBox").checked = alertUpdates;
+    document.getElementById("alertUpdatesCheckBox").onclick = () => {
+        alertUpdates = !alertUpdates;
+        localStorage.setItem("alertUpdates", alertUpdates);
     }
 
 
     //misc tab: skins
     let copySkinListButton = document.querySelector("#copy-skin-list-button");
-    copySkinListButton.onclick = function () {
+    copySkinListButton.onclick = () => {
         navigator.clipboard.writeText(localStorage.getItem("skins")).then(() => {
             copySkinListButton.innerHTML = "Copied!";
         },
@@ -535,7 +614,7 @@ function addOptionsMenu() {
     }
 
     let setSkinListButton = document.querySelector("#set-skin-list-button");
-    setSkinListButton.onclick = function () {
+    setSkinListButton.onclick = () => {
         let value = document.getElementById("set-skin-list-tf").value.trim();
         if (isValidArray(value)) {
             localStorage.setItem("skins", value);
@@ -559,7 +638,7 @@ function addOptionsMenu() {
     }
 
     let addToSkinListButton = document.querySelector("#add-to-skin-list-button");
-    addToSkinListButton.onclick = function () {
+    addToSkinListButton.onclick = () => {
         let value = document.getElementById("set-skin-list-tf").value.trim();
         debugger
         if (isValidArray(value)) {
@@ -585,7 +664,7 @@ function addOptionsMenu() {
 
     //misc tab: settings
     let copySettingsButton = document.querySelector("#copy-settings-button")
-    copySettingsButton.onclick = function () {
+    copySettingsButton.onclick = () => {
         navigator.clipboard.writeText(localStorage.getItem("settings")).then(() => {
             copySettingsButton.innerHTML = "Copied!"
         },
@@ -595,7 +674,7 @@ function addOptionsMenu() {
     }
 
     let setSettingsButton = document.querySelector("#set-settings-button")
-    setSettingsButton.onclick = function () {
+    setSettingsButton.onclick = () => {
         const value = document.getElementById("set-settings-tf").value.trim();
         if (isValidJSON(value)) {
             localStorage.setItem("settings", value);
@@ -612,7 +691,7 @@ function addOptionsMenu() {
 
     //misc tab: hotkeys
     let copyHotkeysButton = document.querySelector("#copy-hotkeys-button")
-    copyHotkeysButton.onclick = function () {
+    copyHotkeysButton.onclick = () => {
         navigator.clipboard.writeText(localStorage.getItem("hotkeys")).then(() => {
             copyHotkeysButton.innerHTML = "Copied!"
         },
@@ -622,7 +701,7 @@ function addOptionsMenu() {
     }
 
     let setHotkeysButton = document.querySelector("#set-hotkeys-button")
-    setHotkeysButton.onclick = function () {
+    setHotkeysButton.onclick = () => {
         const value = document.getElementById("set-hotkeys-tf").value.trim();
         if (isValidJSON(value)) {
             localStorage.setItem("hotkeys", value);
@@ -634,6 +713,40 @@ function addOptionsMenu() {
             setHotkeysButton.innerHTML = "Error";
             setHotkeysButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.")
         }
+    }
+
+    //theme tab inputs
+    let color1Tf = document.querySelector("#theme-color1-tf");
+    let color2Tf = document.querySelector("#theme-color2-tf");
+    color1Tf.value = themeColor1;
+    color2Tf.value = themeColor2;
+
+    //theme tab: save
+    let saveThemeButton = document.querySelector("#save-theme-button");
+    saveThemeButton.onclick = () => {
+        saveThemeButton.setAttribute("tip", "");
+        let errorString = "";
+        let color1 = document.querySelector("#theme-color1-tf").value || "#000000";
+        let color2 = document.querySelector("#theme-color2-tf").value || "#000000";
+        color1 = color1.startsWith("#") ? color1 : "#" + color1;
+        color2 = color2.startsWith("#") ? color2 : "#" + color2;
+        if (isValidHexcode(color1)) {
+            localStorage.setItem("theme-color1", color1);
+            themeColor1 = color1;
+        }
+        else {
+            errorString += "Color 1 is invalid! \n"
+        }
+        if (isValidHexcode(color2)) {
+            localStorage.setItem("theme-color2", color2);
+            themeColor2 = color2;
+        }
+        else {
+            errorString += "Color 2 is invalid! \n"
+        }
+        saveThemeButton.setAttribute("tip", errorString === "" ? saveThemeTip : errorString);
+        saveThemeButton.innerHTML = errorString === "" ? "Theme updated!" : "Error";
+        updateTheme();
     }
 }
 
@@ -670,15 +783,15 @@ function addExtOptionsToggleButton() {
     extOptionsToggleButton.style.boxShadow = '0 0 1px 1px #000';
     extOptionsToggleButton.style.textAlign = "center";
     extOptionsToggleButton.innerHTML = "Toggle Extension Menu";
-    extOptionsToggleButton.onmouseenter = function () {
+    extOptionsToggleButton.onmouseenter = () => {
         this.style.background = "#2b9047";
         this.style.transition = "0.2s";
     }
-    extOptionsToggleButton.onmouseleave = function () {
+    extOptionsToggleButton.onmouseleave = () => {
         this.style.background = "#32a852";
         this.style.transition = "0.2s";
     }
-    extOptionsToggleButton.onclick = function () {
+    extOptionsToggleButton.onclick = () => {
         if (extOptionsHidden) {
             if (screenwidth <= 1500) {
                 document.querySelector(".account-wrapper").style.display = "none";
@@ -718,4 +831,14 @@ function isValidArray(string) {
     } catch (e) {
         return false;
     }
+}
+
+function alertExtUpdates() {
+    if (localStorage.getItem("previousVersion") !== version && alertUpdates) {
+        alert("Eternal Extension got updated:\n" + latestFeatures + "\nYou can see this again by hovering over the Version in the Extension Menu.");
+    }
+}
+
+function isValidHexcode(input) {
+    return /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(input);
 }
