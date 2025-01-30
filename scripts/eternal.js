@@ -45,10 +45,10 @@ css.appendChild(document.createTextNode(`
 //setting variables
 let amountRulesAdded = 0;
 
-if (!localStorage.getItem("goodbyeMessageSeen") === "true" ?? false) {
+if (!localStorage.getItem("goodbyeMessageSeen2")) {
     alert("Hello everyone, \nthank you all for this journey (almost 5 and a half years for me) and thank you for using my (scuffed) extension. I hope I will see you in another ball game or on discord in one of the many community servers. \n- Eternal");
+    localStorage.setItem("goodbyeMessageSeen2", true)
 }
-localStorage.setItem("goodbyeMessageSeen", true)
 let theme = parseInt(localStorage?.getItem("theme") ?? 0);
 let adblocker = localStorage?.getItem("adblocker") === "true" ?? false;
 let oldChatStyling = localStorage.getItem("oldChatStyling") === "true" ?? true;
